@@ -32,6 +32,74 @@ import (
 type SimpleChaincode struct {
 }
 
+//Foundation is ...
+type Foundation struct {
+	ObjectType string `json:"docType"` //field for couchdb
+
+	FoundationID       string      `json:"foundationId"`
+	FoundationUsername string      `json:"foundationUsername"`
+	FoundationCompany  string      `json:"foundationCompany"`
+	Role               string      `json:"role"`
+	Permissions        Permissions `json:"permissions"`
+	Location           Location    `json:"location"`
+}
+
+//NGO ss
+type NGO struct {
+	ObjectType string `json:"docType"` //field for couchdb
+
+	NGOID       string      `json:"ngoId"`
+	NGOUsername string      `json:"ngoUsername"`
+	NGOCompany  string      `json:"ngoCompany"`
+	Role        string      `json:"role"`
+	Permissions Permissions `json:"permissions"`
+	Location    Location    `json:"location"`
+}
+
+//Donor ss
+type Donor struct {
+	ObjectType string `json:"docType"` //field for couchdb
+
+	DonorID       string      `json:"donorId"`
+	DonorUsername string      `json:"donorUsername"`
+	DonorCompany  string      `json:"donorcompany"`
+	Donations     []string    `json:"donations"`
+	Role          string      `json:"role"`
+	Permissions   Permissions `json:"permissions"`
+	Location      Location    `json:"location"`
+}
+
+//Board as
+type Board struct {
+}
+
+//Validator as
+type Validator struct {
+}
+
+//CRM as
+type CRM struct {
+}
+
+//SDG as
+type SDG struct {
+	SDGType string `json:"SDGType"`
+}
+
+//Location as
+type Location struct {
+	Latitude  string `json:"latitude"`
+	Longitude string `json:"longitude"`
+}
+
+//Permissions as
+type Permissions struct {
+	All       string `json:"all"`
+	Write     string `json:"write"`
+	Read      string `json:"read"`
+	ReadWrite string `json:"readWrite"`
+}
+
 // ============================================================================================================================
 // Main
 // ============================================================================================================================
@@ -85,24 +153,63 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println(" ")
 	fmt.Println("starting invoke, for - " + function)
 
-	if function != "invoke" {
-		return shim.Error("Unknown function call")
-	}
-
-	if len(args) < 2 {
-		return shim.Error("Incorrect number of arguments. Expecting at least 2")
+	if len(args) < 1 {
+		return shim.Error("Incorrect number of arguments. Expecting at least 1")
 	}
 
 	// Handle different functions
-	if args[0] == "init" { //initialize the chaincode state, used as reset
+	if function == "init" {
 		return t.Init(stub)
-	} else if args[0] == "read" { //generic read ledger
+	} else if function == "read" {
 		return read(stub, args)
-	} else if args[0] == "write" { //generic writes to ledger
+	} else if function == "write" {
 		return write(stub, args)
-	} else if args[0] == "invke" { //generic writes to ledger
+	} else if function == "invke" {
 		return invke(stub, args)
+	} else if function == "addFoundation" { // Registration API's
+		return addFoundation(stub, args)
+	} else if function == "updateFoundation" {
+		return updateFoundation(stub, args)
+	} else if function == "addNGO" {
+		return addNGO(stub, args)
+	} else if function == "updateNGO" {
+		return updateNGO(stub, args)
+	} else if function == "addDonor" {
+		return addDonor(stub, args)
+	} else if function == "updateDonor" {
+		return updateDonor(stub, args)
+	} else if function == "addBoard" {
+		return addBoard(stub, args)
+	} else if function == "updateBoard" {
+		return updateBoard(stub, args)
+	} else if function == "addCRM" {
+		return addCRM(stub, args)
+	} else if function == "updateCRM" {
+		return updateCRM(stub, args)
+	} else if function == "addAdmin" {
+		return addAdmin(stub, args)
+	} else if function == "updateAdmin" {
+		return updateAdmin(stub, args)
+	} else if function == "addProject" { // Project API's
+		return addProject(stub, args)
+	} else if function == "updateProject" {
+		return updateProject(stub, args)
+	} else if function == "addMilestone" {
+		return addMilestone(stub, args)
+	} else if function == "updateMilestone" {
+		return updateMilestone(stub, args)
+	} else if function == "addActivity" {
+		return addActivity(stub, args)
+	} else if function == "updateActivity" {
+		return updateActivity(stub, args)
+	} else if function == "updateProjectStatus" { // Flow API's
+		return updateProjectStatus(stub, args)
+	} else if function == "getHistory" { // Query API's
+		return getHistory(stub, args)
+	} else if function == "query" {
+		return query(stub, args)
 	}
+
 	// error out
 	fmt.Println("Received unknown invoke function name - " + function)
 	return shim.Error("Received unknown invoke function name - '" + function + "'")

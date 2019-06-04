@@ -70,3 +70,77 @@ func invke(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	return shim.Success(nil)
 }
+
+//=============== USER REGISTARTION RELATED FUNCTION'S START HERE ===============================================================
+
+//addFoundation
+func addFoundation(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//updateFoundation
+func updateFoundation(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//addNGO
+func addNGO(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//updateNGO
+func updateNGO(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//addDonor
+func addDonor(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//updateDonor
+func updateDonor(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//addBoard
+func addBoard(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//updateBoard
+func updateBoard(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//addCRM
+func addCRM(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//updateCRM
+func updateCRM(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//addAdmin
+func addAdmin(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
+
+//updateAdmin
+func updateAdmin(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	return shim.Success(nil)
+}
