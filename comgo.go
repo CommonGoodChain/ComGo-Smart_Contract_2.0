@@ -36,54 +36,160 @@ type SimpleChaincode struct {
 type Foundation struct {
 	ObjectType string `json:"docType"` //field for couchdb
 
-	FoundationID       string      `json:"foundationId"`
-	FoundationUsername string      `json:"foundationUsername"`
-	FoundationCompany  string      `json:"foundationCompany"`
-	Role               string      `json:"role"`
-	Permissions        Permissions `json:"permissions"`
-	Location           Location    `json:"location"`
+	FoundationID       string   `json:"foundationId"`
+	FoundationUsername string   `json:"foundationUsername"`
+	FoundationCompany  string   `json:"foundationCompany"`
+	Role               string   `json:"role"`
+	ProjectPermission  string   `json:"projectPermission"`
+	UserPermission     string   `json:"userPermission"`
+	Location           Location `json:"location"`
 }
 
 //NGO ss
 type NGO struct {
 	ObjectType string `json:"docType"` //field for couchdb
 
-	NGOID       string      `json:"ngoId"`
-	NGOUsername string      `json:"ngoUsername"`
-	NGOCompany  string      `json:"ngoCompany"`
-	Role        string      `json:"role"`
-	Permissions Permissions `json:"permissions"`
-	Location    Location    `json:"location"`
+	NGOID             string      `json:"ngoId"`
+	NGOUsername       string      `json:"ngoUsername"`
+	NGOCompany        string      `json:"ngoCompany"`
+	Role              string      `json:"role"`
+	Permissions       Permissions `json:"permissions"`
+	Location          Location    `json:"location"`
+	ProjectPermission string      `json:"projectPermission"`
+	UserPermission    string      `json:"userPermission"`
 }
 
 //Donor ss
 type Donor struct {
 	ObjectType string `json:"docType"` //field for couchdb
 
-	DonorID       string      `json:"donorId"`
-	DonorUsername string      `json:"donorUsername"`
-	DonorCompany  string      `json:"donorcompany"`
-	Donations     []string    `json:"donations"`
-	Role          string      `json:"role"`
-	Permissions   Permissions `json:"permissions"`
-	Location      Location    `json:"location"`
+	DonorID           string      `json:"donorId"`
+	DonorUsername     string      `json:"donorUsername"`
+	DonorCompany      string      `json:"donorcompany"`
+	Donations         []string    `json:"donations"`
+	Role              string      `json:"role"`
+	Permissions       Permissions `json:"permissions"`
+	Location          Location    `json:"location"`
+	ProjectPermission string      `json:"projectPermission"`
+	UserPermission    string      `json:"userPermission"`
 }
 
 //Board as
 type Board struct {
+	ObjectType string `json:"docType"` //field for couchdb
+
+	BoardID           string `json:"boardID"`
+	BoardUsername     string `json:"boardUsername"`
+	BoardCompany      string `json:"boardCompany"`
+	Role              string `json:"role"`
+	ProjectPermission string `json:"projectPermission"`
+	UserPermission    string `json:"userPermission"`
 }
 
 //Validator as
 type Validator struct {
+	ProjectPermission string `json:"projectPermission"`
+	UserPermission    string `json:"userPermission"`
 }
 
 //CRM as
 type CRM struct {
+	ObjectType string `json:"docType"` //field for couchdb
+
+	CRMID             string `json:"crmID"`
+	CRMUsername       string `json:"crmUsername"`
+	CRMCompany        string `json:"crmCompany"`
+	Role              string `json:"role"`
+	ProjectPermission string `json:"projectPermission"`
+	UserPermission    string `json:"userPermission"`
+}
+
+//Project as
+type Project struct {
+	ObjectType         string   `json:"docType"` //field for couchdb
+	ProjectID          string   `json:"projectId"`
+	ProjectName        string   `json:"projectName"`
+	ProjectType        string   `json:"projectType"`
+	Flag               string   `json:"flag"`
+	FundGoal           float64  `json:"fundGoal"`
+	Currency           string   `json:"currency"`
+	FundRaised         float64  `json:"fundRaised"`
+	FundAllocated      float64  `json:"fundAllocated"`
+	FundNotAllocated   float64  `json:"fundNotAllocated"`
+	ProjectBudget      float64  `json:"projectBudget"`
+	ProjectOwner       string   `json:"projectOwner"`
+	FoundationCompany  string   `json:"foundationCompany"`
+	NGOCompany         string   `json:"ngoCompany"`
+	Donations          []string `json:"donations"`
+	Status             string   `json:"status"`
+	FundAllocationType string   `json:"fundAllocationType"` // 1 = Manual, 2 = Automated, 3 = On Proof Submission, 4 = On Validation
+	TransactionLoc     Location `json:"transactionLoc"`
+	SDG                []SDG    `json:"SDG"`
+	ProjectLoc         Location `json:"projectLoc"`
+	CreatedBy          string   `json:"createdBy"`
+	SubRole            string   `json:"subRole"`
+	IsPublished        bool     `json:"isPublished"`
+	IsApproved         bool     `json:"isApproved"`
+	Remarks            string   `json:"remarks"`
+	StartDate          string   `json:"startDate"`
+	EndDate            string   `json:"endDate"`
+	Description        string   `json:"description"`
+	Country            string   `json:"country"`
+}
+
+//Milestone as
+type Milestone struct {
+	ObjectType       string   `json:"docType"` //field for couchdb
+	MilestoneName    string   `json:"milestoneName"`
+	StartDate        string   `json:"startDate"`
+	EndDate          string   `json:"endDate"`
+	MilestoneID      string   `json:"milestoneId"`
+	ProjectID        string   `json:"projectId"`
+	MilBudget        float64  `json:"milestoneBudget"`
+	MilFundAllocated float64  `json:"milFundAllocated"`
+	MilFundRequested float64  `json:"milFundRequested"`
+	MilFundReleased  float64  `json:"MilFundReleased"`
+	MilestoneOwner   string   `json:"milestoneOwner"`
+	ActivityCount    int      `json:"activityCount"`
+	Status           string   `json:"status"`
+	TransactionLoc   Location `json:"transactionLoc"`
+	IsApproved       bool     `json:"isApproved"`
+	Description      string   `json:"description"`
+}
+
+//Activity as
+type Activity struct {
+	ObjectType          string   `json:"docType"` //field for couchdb
+	ActivityName        string   `json:"activityName"`
+	StartDate           string   `json:"startDate"`
+	EndDate             string   `json:"endDate"`
+	ActivityBudget      float64  `json:"activityBudget"`
+	FundAllocated       float64  `json:"fundAllocated"`
+	FundReleased        float64  `json:"fundReleased"`
+	FundRequested       float64  `json:"fundRequested"`
+	ActivityID          string   `json:"activityId"`
+	MilestoneID         string   `json:"milestoneId"`
+	ProjectID           string   `json:"projectId"`
+	Validation          bool     `json:"validation"`
+	Status              string   `json:"status"`
+	ValidatorID         string   `json:"validatorId"`
+	SecondaryValidation bool     `json:"secondaryValidation"`
+	PartialValidation   bool     `json:"partialValidation"`
+	TransactionLoc      Location `json:"transactionLoc"`
+	IsApproved          bool     `json:"isApproved"`
+	Remarks             string   `json:"remarks"`
+	Description         string   `json:"description"`
 }
 
 //SDG as
 type SDG struct {
 	SDGType string `json:"SDGType"`
+}
+
+//ProjectFunds as
+type ProjectFunds struct {
+	DonorName       string  `json:"donorName"`
+	DonoationAmount float64 `json:"donationAmount"`
 }
 
 //Location as
@@ -92,7 +198,7 @@ type Location struct {
 	Longitude string `json:"longitude"`
 }
 
-//Permissions as
+//Permissions for users
 type Permissions struct {
 	All       string `json:"all"`
 	Write     string `json:"write"`
@@ -208,6 +314,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return getHistory(stub, args)
 	} else if function == "query" {
 		return query(stub, args)
+	} else if function == "query_all" {
+		return query_all(stub, args)
 	}
 
 	// error out
