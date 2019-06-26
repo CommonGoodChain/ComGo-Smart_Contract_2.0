@@ -32,76 +32,42 @@ import (
 type SimpleChaincode struct {
 }
 
-//Foundation is ...
-type Foundation struct {
+//PrivateUser is ...
+type PrivateUser struct {
 	ObjectType string `json:"docType"` //field for couchdb
 
-	FoundationID       string   `json:"foundationId"`
-	FoundationUsername string   `json:"foundationUsername"`
-	FoundationCompany  string   `json:"foundationCompany"`
-	Role               string   `json:"role"`
-	ProjectPermission  string   `json:"projectPermission"`
-	UserPermission     string   `json:"userPermission"`
-	Location           Location `json:"location"`
-}
-
-//NGO ss
-type NGO struct {
-	ObjectType string `json:"docType"` //field for couchdb
-
-	NGOID             string      `json:"ngoId"`
-	NGOUsername       string      `json:"ngoUsername"`
-	NGOCompany        string      `json:"ngoCompany"`
-	Role              string      `json:"role"`
-	Permissions       Permissions `json:"permissions"`
-	Location          Location    `json:"location"`
-	ProjectPermission string      `json:"projectPermission"`
-	UserPermission    string      `json:"userPermission"`
+	UserID         string        `json:"foundationId"`
+	Username       string        `json:"Username"`
+	Company        string        `json:"Company"`
+	Role           string        `json:"role"`
+	UserPermission string        `json:"userPermission"`
+	Location       Location      `json:"location"`
+	Permissions    []Permissions `json:"permissions"`
 }
 
 //Donor ss
 type Donor struct {
 	ObjectType string `json:"docType"` //field for couchdb
 
-	DonorID           string      `json:"donorId"`
-	DonorUsername     string      `json:"donorUsername"`
-	DonorCompany      string      `json:"donorcompany"`
-	Donations         []string    `json:"donations"`
-	Role              string      `json:"role"`
-	Permissions       Permissions `json:"permissions"`
-	Location          Location    `json:"location"`
-	ProjectPermission string      `json:"projectPermission"`
-	UserPermission    string      `json:"userPermission"`
+	DonorID       string        `json:"donorId"`
+	DonorUsername string        `json:"donorUsername"`
+	DonorCompany  string        `json:"donorCompany"`
+	Donations     []string      `json:"donations"`
+	Role          string        `json:"role"`
+	Permissions   []Permissions `json:"permissions"`
+	Location      Location      `json:"location"`
 }
 
-//Board as
-type Board struct {
+//Organization ss
+type Organization struct {
 	ObjectType string `json:"docType"` //field for couchdb
 
-	BoardID           string `json:"boardID"`
-	BoardUsername     string `json:"boardUsername"`
-	BoardCompany      string `json:"boardCompany"`
-	Role              string `json:"role"`
-	ProjectPermission string `json:"projectPermission"`
-	UserPermission    string `json:"userPermission"`
-}
-
-//Validator as
-type Validator struct {
-	ProjectPermission string `json:"projectPermission"`
-	UserPermission    string `json:"userPermission"`
-}
-
-//CRM as
-type CRM struct {
-	ObjectType string `json:"docType"` //field for couchdb
-
-	CRMID             string `json:"crmID"`
-	CRMUsername       string `json:"crmUsername"`
-	CRMCompany        string `json:"crmCompany"`
-	Role              string `json:"role"`
-	ProjectPermission string `json:"projectPermission"`
-	UserPermission    string `json:"userPermission"`
+	OrgID       string        `json:"orgId"`
+	OrgUsername string        `json:"orgUsername"`
+	OrgCompany  string        `json:"orgCompany"`
+	Role        string        `json:"role"`
+	Permissions []Permissions `json:"permissions"`
+	Location    Location      `json:"location"`
 }
 
 //Project as
@@ -118,7 +84,7 @@ type Project struct {
 	FundNotAllocated   float64  `json:"fundNotAllocated"`
 	ProjectBudget      float64  `json:"projectBudget"`
 	ProjectOwner       string   `json:"projectOwner"`
-	FoundationCompany  string   `json:"foundationCompany"`
+	Organization       string   `json:"organization"`
 	NGOCompany         string   `json:"ngoCompany"`
 	Donations          []string `json:"donations"`
 	Status             string   `json:"status"`
@@ -200,10 +166,10 @@ type Location struct {
 
 //Permissions for users
 type Permissions struct {
-	All       string `json:"all"`
-	Write     string `json:"write"`
-	Read      string `json:"read"`
-	ReadWrite string `json:"readWrite"`
+	OrgName      string `json:"orgName"`
+	FunctionName string `json:"functionName"`
+	Permission   string `json:"permission"`
+	Test         string `json:"test"`
 }
 
 // ============================================================================================================================
@@ -273,29 +239,17 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	} else if function == "invke" {
 		return invke(stub, args)
 	} else if function == "addFoundation" { // Registration API's
-		return addFoundation(stub, args)
+		return addPrivateUser(stub, args)
 	} else if function == "updateFoundation" {
-		return updateFoundation(stub, args)
-	} else if function == "addNGO" {
-		return addNGO(stub, args)
-	} else if function == "updateNGO" {
-		return updateNGO(stub, args)
+		return updatePrivateUser(stub, args)
 	} else if function == "addDonor" {
 		return addDonor(stub, args)
 	} else if function == "updateDonor" {
 		return updateDonor(stub, args)
-	} else if function == "addBoard" {
-		return addBoard(stub, args)
-	} else if function == "updateBoard" {
-		return updateBoard(stub, args)
-	} else if function == "addCRM" {
-		return addCRM(stub, args)
-	} else if function == "updateCRM" {
-		return updateCRM(stub, args)
 	} else if function == "addAdmin" {
-		return addAdmin(stub, args)
+		return addOrg(stub, args)
 	} else if function == "updateAdmin" {
-		return updateAdmin(stub, args)
+		return updateOrg(stub, args)
 	} else if function == "addProject" { // Project API's
 		return addProject(stub, args)
 	} else if function == "updateProject" {

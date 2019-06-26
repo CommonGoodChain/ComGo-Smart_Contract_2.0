@@ -214,37 +214,19 @@ func constructQueryResponseFromIterator(resultsIterator shim.StateQueryIteratorI
 // ============================================================================================================================
 // Get Foundation - get the foundation user from ledger
 // ============================================================================================================================
-func getFoundation(stub shim.ChaincodeStubInterface, id string) (Foundation, error) {
-	var foundationUser Foundation
+func getPrivateUser(stub shim.ChaincodeStubInterface, id string) (PrivateUser, error) {
+	var user PrivateUser
 	userAsBytes, err := stub.GetState(id) //getState retreives a key/value from the ledger
 	if err != nil {                       //this seems to always succeed, even if key didn't exist
-		return foundationUser, errors.New("Failed to get foundation user - " + id)
+		return user, errors.New("Failed to get private user - " + id)
 	}
-	json.Unmarshal(userAsBytes, &foundationUser) //un stringify it aka JSON.parse()
+	json.Unmarshal(userAsBytes, &user) //un stringify it aka JSON.parse()
 
-	if len(foundationUser.FoundationUsername) == 0 { //test if user is actually here or just nil
-		return foundationUser, errors.New("foundation user does not exist - " + id + ", '" + foundationUser.FoundationUsername + "' '" + foundationUser.FoundationCompany + "'")
-	}
-
-	return foundationUser, nil
-}
-
-// ============================================================================================================================
-// Get Foundation - get the foundation user from ledger
-// ============================================================================================================================
-func getNGO(stub shim.ChaincodeStubInterface, id string) (NGO, error) {
-	var ngoUser NGO
-	userAsBytes, err := stub.GetState(id) //getState retreives a key/value from the ledger
-	if err != nil {                       //this seems to always succeed, even if key didn't exist
-		return ngoUser, errors.New("Failed to get foundation user - " + id)
-	}
-	json.Unmarshal(userAsBytes, &ngoUser) //un stringify it aka JSON.parse()
-
-	if len(ngoUser.NGOUsername) == 0 { //test if user is actually here or just nil
-		return ngoUser, errors.New("foundation user does not exist - " + id + ", '" + ngoUser.NGOUsername + "' '" + ngoUser.NGOCompany + "'")
+	if len(user.Username) == 0 { //test if user is actually here or just nil
+		return user, errors.New("foundation user does not exist - " + id + ", '" + user.Username + "' '")
 	}
 
-	return ngoUser, nil
+	return user, nil
 }
 
 // ============================================================================================================================
@@ -263,42 +245,6 @@ func getDonor(stub shim.ChaincodeStubInterface, id string) (Donor, error) {
 	}
 
 	return donorUser, nil
-}
-
-// ============================================================================================================================
-// Get Foundation - get the foundation user from ledger
-// ============================================================================================================================
-func getBoard(stub shim.ChaincodeStubInterface, id string) (Board, error) {
-	var boardUser Board
-	userAsBytes, err := stub.GetState(id) //getState retreives a key/value from the ledger
-	if err != nil {                       //this seems to always succeed, even if key didn't exist
-		return boardUser, errors.New("Failed to get foundation user - " + id)
-	}
-	json.Unmarshal(userAsBytes, &boardUser) //un stringify it aka JSON.parse()
-
-	if len(boardUser.BoardUsername) == 0 { //test if user is actually here or just nil
-		return boardUser, errors.New("foundation user does not exist - " + id + ", '" + boardUser.BoardUsername + "' '" + boardUser.BoardCompany + "'")
-	}
-
-	return boardUser, nil
-}
-
-// ============================================================================================================================
-// Get Foundation - get the foundation user from ledger
-// ============================================================================================================================
-func getCRM(stub shim.ChaincodeStubInterface, id string) (CRM, error) {
-	var crmUser CRM
-	userAsBytes, err := stub.GetState(id) //getState retreives a key/value from the ledger
-	if err != nil {                       //this seems to always succeed, even if key didn't exist
-		return crmUser, errors.New("Failed to get foundation user - " + id)
-	}
-	json.Unmarshal(userAsBytes, &crmUser) //un stringify it aka JSON.parse()
-
-	if len(crmUser.CRMUsername) == 0 { //test if user is actually here or just nil
-		return crmUser, errors.New("foundation user does not exist - " + id + ", '" + crmUser.CRMUsername + "' '" + crmUser.CRMCompany + "'")
-	}
-
-	return crmUser, nil
 }
 
 // =================================================================================================

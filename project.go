@@ -58,7 +58,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		sdg = append(sdg, s)
 	}
 
-	project.FoundationCompany = args[1]
+	project.Organization = args[1]
 	project.NGOCompany = args[2]
 	project.ProjectName = args[3]
 	project.FundGoal = parseFloat(args[4])
@@ -139,7 +139,7 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 		sdg = append(sdg, s)
 	}
 
-	project.FoundationCompany = args[1]
+	project.Organization = args[1]
 	project.NGOCompany = args[2]
 	project.ProjectName = args[3]
 	project.FundGoal = parseFloat(args[4])
