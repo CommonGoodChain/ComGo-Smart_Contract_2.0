@@ -36,38 +36,36 @@ type SimpleChaincode struct {
 type PrivateUser struct {
 	ObjectType string `json:"docType"` //field for couchdb
 
-	UserID         string        `json:"foundationId"`
-	Username       string        `json:"Username"`
-	Company        string        `json:"Company"`
-	Role           string        `json:"role"`
-	UserPermission string        `json:"userPermission"`
-	Location       Location      `json:"location"`
-	Permissions    []Permissions `json:"permissions"`
+	UserID    string   `json:"foundationId"`
+	Username  string   `json:"Username"`
+	Company   string   `json:"Company"`
+	Role      string   `json:"role"`
+	FirstName string   `json:"firstName"`
+	LastName  string   `json:"lastName"`
+	Location  Location `json:"location"`
 }
 
 //Donor ss
 type Donor struct {
 	ObjectType string `json:"docType"` //field for couchdb
 
-	DonorID       string        `json:"donorId"`
-	DonorUsername string        `json:"donorUsername"`
-	DonorCompany  string        `json:"donorCompany"`
-	Donations     []string      `json:"donations"`
-	Role          string        `json:"role"`
-	Permissions   []Permissions `json:"permissions"`
-	Location      Location      `json:"location"`
+	DonorID       string   `json:"donorId"`
+	DonorUsername string   `json:"donorUsername"`
+	DonorCompany  string   `json:"donorCompany"`
+	Donations     []string `json:"donations"`
+	Role          string   `json:"role"`
+	Location      Location `json:"location"`
 }
 
 //Organization ss
 type Organization struct {
 	ObjectType string `json:"docType"` //field for couchdb
 
-	OrgID       string        `json:"orgId"`
-	OrgUsername string        `json:"orgUsername"`
-	OrgCompany  string        `json:"orgCompany"`
-	Role        string        `json:"role"`
-	Permissions []Permissions `json:"permissions"`
-	Location    Location      `json:"location"`
+	OrgID       string   `json:"orgId"`
+	OrgUsername string   `json:"orgUsername"`
+	OrgCompany  string   `json:"orgCompany"`
+	Role        string   `json:"role"`
+	Location    Location `json:"location"`
 }
 
 //Project as
@@ -164,14 +162,6 @@ type Location struct {
 	Longitude string `json:"longitude"`
 }
 
-//Permissions for users
-type Permissions struct {
-	OrgName      string `json:"orgName"`
-	FunctionName string `json:"functionName"`
-	Permission   string `json:"permission"`
-	Test         string `json:"test"`
-}
-
 // ============================================================================================================================
 // Main
 // ============================================================================================================================
@@ -238,9 +228,9 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return write(stub, args)
 	} else if function == "invke" {
 		return invke(stub, args)
-	} else if function == "addFoundation" { // Registration API's
+	} else if function == "addPrivateUser" { // Registration API's
 		return addPrivateUser(stub, args)
-	} else if function == "updateFoundation" {
+	} else if function == "updatePrivateUser" {
 		return updatePrivateUser(stub, args)
 	} else if function == "addDonor" {
 		return addDonor(stub, args)

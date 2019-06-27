@@ -247,6 +247,24 @@ func getDonor(stub shim.ChaincodeStubInterface, id string) (Donor, error) {
 	return donorUser, nil
 }
 
+// ============================================================================================================================
+// Get organization - get the organization user from ledger
+// ============================================================================================================================
+func getOrg(stub shim.ChaincodeStubInterface, id string) (Organization, error) {
+	var organizationUser Organization
+	userAsBytes, err := stub.GetState(id) //getState retreives a key/value from the ledger
+	if err != nil {                       //this seems to always succeed, even if key didn't exist
+		return organizationUser, errors.New("Failed to get organization user - " + id)
+	}
+	json.Unmarshal(userAsBytes, &organizationUser) //un stringify it aka JSON.parse()
+
+	if len(organizationUser.OrgUsername) == 0 { //test if user is actually here or just nil
+		return organizationUser, errors.New("organization does not exist - " + id + ", '" + organizationUser.OrgUsername + "' '" + organizationUser.OrgCompany + "'")
+	}
+
+	return organizationUser, nil
+}
+
 // =================================================================================================
 // query_all_invoice - Query records using a (partial) composite key named by first argument
 // =================================================================================================

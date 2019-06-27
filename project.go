@@ -24,7 +24,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	log.Println(certname)
 
-	if len(args) != 19 {
+	if len(args) != 20 {
 		return shim.Error("Incorrect number of arguments. Expecting 19")
 	}
 
@@ -109,7 +109,7 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	}
 	log.Println(certname)
 
-	if len(args) != 19 {
+	if len(args) != 20 {
 		return shim.Error("Incorrect number of arguments. Expecting 19")
 	}
 
@@ -189,8 +189,8 @@ func updateProjectStatus(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	}
 	log.Println(certname)
 
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
 
 	//input sanitation
@@ -282,8 +282,8 @@ func addMilestone(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	log.Println(certname)
 
-	if len(args) != 9 {
-		return shim.Error("Incorrect number of arguments. Expecting 9")
+	if len(args) != 11 {
+		return shim.Error("Incorrect number of arguments. Expecting 11")
 	}
 
 	//input sanitation
@@ -356,8 +356,8 @@ func updateMilestone(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	}
 	log.Println(certname)
 
-	if len(args) != 9 {
-		return shim.Error("Incorrect number of arguments. Expecting 9")
+	if len(args) != 8 {
+		return shim.Error("Incorrect number of arguments. Expecting 8")
 	}
 
 	//input sanitation
@@ -424,8 +424,8 @@ func updateMilestoneStatus(stub shim.ChaincodeStubInterface, args []string) pb.R
 	}
 	log.Println(certname)
 
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
 	}
 
 	//input sanitation
@@ -456,7 +456,7 @@ func updateMilestoneStatus(stub shim.ChaincodeStubInterface, args []string) pb.R
 	// update project
 	project.Status = args[3]
 	project.Flag = args[4]
-	project.IsApproved = parseBool(args[4])
+	project.IsApproved = parseBool(args[5])
 
 	log.Println("update milestone status object is creataed ", project)
 
@@ -494,8 +494,8 @@ func deleteMilestone(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	}
 	log.Println(certname)
 
-	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 1")
+	if len(args) != 3 {
+		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
 
 	//input sanitation
@@ -547,8 +547,8 @@ func addActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	log.Println(certname)
 
-	if len(args) != 9 {
-		return shim.Error("Incorrect number of arguments. Expecting 9")
+	if len(args) != 14 {
+		return shim.Error("Incorrect number of arguments. Expecting 14")
 	}
 
 	//input sanitation
@@ -642,8 +642,8 @@ func updateActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	}
 	log.Println(certname)
 
-	if len(args) != 9 {
-		return shim.Error("Incorrect number of arguments. Expecting 9")
+	if len(args) != 12 {
+		return shim.Error("Incorrect number of arguments. Expecting 12")
 	}
 
 	//input sanitation
@@ -731,8 +731,8 @@ func updateActivityStatus(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	}
 	log.Println(certname)
 
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
 	}
 
 	//input sanitation
@@ -810,8 +810,8 @@ func deleteActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	}
 	log.Println(certname)
 
-	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 1")
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
 
 	//input sanitation
@@ -956,5 +956,10 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	log.Println("- end - delete activity")
 
+	return shim.Success(nil)
+}
+
+//fund
+func fund(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	return shim.Success(nil)
 }

@@ -107,15 +107,16 @@ func addPrivateUser(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	user.ObjectType = "PrivateUser"
 	user.UserID = string(certname)
 	user.Username = args[0]
-	user.Permissions = nil
-	user.UserPermission = args[3]
-	user.Role = args[4]
+	user.FirstName = args[1]
+	user.LastName = args[2]
+	user.Role = args[3]
 
 	var location Location
-	location.Latitude = args[5]
-	location.Longitude = args[6]
+	location.Latitude = args[4]
+	location.Longitude = args[5]
+	user.Location = location
 
-	log.Println("final private user ", user)
+	log.Println("final obj of private user ", user)
 
 	//store user
 	userAsBytes, _ := json.Marshal(user)
@@ -131,10 +132,10 @@ func addPrivateUser(stub shim.ChaincodeStubInterface, args []string) pb.Response
 //updatePrivateUser
 func updatePrivateUser(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
-	log.Println("started to update the foundation")
+	log.Println("started to update the private user")
 
-	if len(args) != 6 {
-		return shim.Error("Incorrect number of arguments. Expecting 6")
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
 	}
 
 	//input sanitation
@@ -149,24 +150,21 @@ func updatePrivateUser(stub shim.ChaincodeStubInterface, args []string) pb.Respo
 		return shim.Error("Error retrieving cert")
 	}
 
+	log.Println("certname ", string(certname))
+
 	//check if user already exists
-	privateUser, err := getPrivateUser(stub, string(certname))
+	privateUser, err := getPrivateUser(stub, args[0])
 	if err != nil {
-		fmt.Println("This foundation user already exists - " + string(certname))
-		return shim.Error("This foundation user already exists - " + string(certname))
+		fmt.Println("This private user is not exists - " + args[0])
+		return shim.Error("This private user is not exists - " + args[0])
 	}
+	log.Println("args = ", args)
 
-	privateUser.Username = args[0]
-	privateUser.Permissions = nil
-	// foundationUser.ProjectPermission = args[2]
-	privateUser.UserPermission = args[3]
-	privateUser.Role = args[4]
-
-	var location Location
-	location.Latitude = args[5]
-	location.Longitude = args[6]
-
-	log.Println("final updated foundation user ", privateUser)
+	privateUser.FirstName = args[0]
+	privateUser.LastName = args[1]
+	privateUser.Role = args[2]
+	privateUser.UserID = args[3]
+	privateUser.Company = args[4]
 
 	//store user
 	userAsBytes, _ := json.Marshal(privateUser)
@@ -175,7 +173,7 @@ func updatePrivateUser(stub shim.ChaincodeStubInterface, args []string) pb.Respo
 		return shim.Error(err.Error())
 	}
 
-	log.Println("- end update foundation")
+	log.Println("- end update private user")
 	return shim.Success(nil)
 }
 
@@ -212,11 +210,11 @@ func addDonor(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	user.DonorID = string(certname)
 	user.DonorUsername = args[0]
 	user.DonorCompany = args[1]
-	user.Role = args[4]
+	user.Role = args[2]
 
 	var location Location
-	location.Latitude = args[5]
-	location.Longitude = args[6]
+	location.Latitude = args[3]
+	location.Longitude = args[4]
 
 	log.Println("final DONOR user object ", user)
 
@@ -261,11 +259,11 @@ func updateDonor(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	donorUser.DonorUsername = args[0]
 	donorUser.DonorCompany = args[1]
-	donorUser.Role = args[4]
+	donorUser.Role = args[2]
 
 	var location Location
-	location.Latitude = args[5]
-	location.Longitude = args[6]
+	location.Latitude = args[3]
+	location.Longitude = args[4]
 
 	log.Println("final updated the donor user ", donorUser)
 
@@ -280,14 +278,103 @@ func updateDonor(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	return shim.Success(nil)
 }
 
-//addAdmin
+//addOrg
 func addOrg(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var err error
+	log.Println("started to add new organization")
 
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
+	}
+
+	//input sanitation
+	err = sanitize_arguments(args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	certname, err := get_cert(stub)
+	if err != nil {
+		fmt.Printf("INVOKE: Error retrieving cert: %s", err)
+		return shim.Error("Error retrieving cert")
+	}
+
+	//check if organization already exists
+	_, err = getOrg(stub, string(certname))
+	if err == nil {
+		fmt.Println("This organization is already exists - " + string(certname))
+		return shim.Error("This organization is already exists - " + string(certname))
+	}
+
+	var user Organization
+	user.ObjectType = "Organization"
+	user.OrgID = string(certname)
+	user.OrgUsername = args[0]
+	user.OrgCompany = args[1]
+	user.Role = args[2]
+
+	var location Location
+	location.Latitude = args[3]
+	location.Longitude = args[4]
+
+	log.Println("final organization object ", user)
+
+	//store user
+	userAsBytes, _ := json.Marshal(user)
+	err = stub.PutState(user.OrgID, userAsBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	log.Println("- end registration of nre organization")
 	return shim.Success(nil)
 }
 
-//updateAdmin
+//updateOrg
 func updateOrg(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var err error
+	log.Println("started to update new organization")
 
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
+	}
+
+	//input sanitation
+	err = sanitize_arguments(args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	certname, err := get_cert(stub)
+	if err != nil {
+		fmt.Printf("INVOKE: Error retrieving cert: %s", err)
+		return shim.Error("Error retrieving cert")
+	}
+
+	//check if organization already exists
+	orgUser, err := getOrg(stub, string(certname))
+	if err != nil {
+		fmt.Println("This Donor user already exists - " + string(certname))
+		return shim.Error("This Donor user already exists - " + string(certname))
+	}
+
+	orgUser.OrgUsername = args[0]
+	orgUser.OrgCompany = args[1]
+	orgUser.Role = args[2]
+
+	var location Location
+	location.Latitude = args[3]
+	location.Longitude = args[4]
+
+	log.Println("final organization object ", orgUser)
+
+	//store user
+	userAsBytes, _ := json.Marshal(orgUser)
+	err = stub.PutState(orgUser.OrgID, userAsBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	log.Println("- end registration of nre organization")
 	return shim.Success(nil)
 }
