@@ -153,6 +153,7 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	project.ProjectBudget = parseFloat(args[12])
 	project.ProjectOwner = args[13]
 	project.FundAllocationType = args[14]
+	project.IsPublished = parseBool(args[15])
 	project.Status = args[16]
 	project.Flag = args[17]
 	project.SDG = sdg
@@ -189,8 +190,8 @@ func updateProjectStatus(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	}
 	log.Println(certname)
 
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
 	//input sanitation
@@ -206,10 +207,10 @@ func updateProjectStatus(stub shim.ChaincodeStubInterface, args []string) pb.Res
 		return shim.Error(err.Error())
 	}
 
-	project.Status = args[0]
-	project.Flag = args[1]
-	project.IsPublished = parseBool(args[2])
-	project.IsApproved = parseBool(args[3])
+	project.Status = args[1]
+	project.Flag = args[2]
+	project.IsPublished = parseBool(args[3])
+	project.IsApproved = parseBool(args[4])
 
 	log.Println("update Project project status and flag object is creataed ", project)
 
@@ -282,8 +283,8 @@ func addMilestone(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	log.Println(certname)
 
-	if len(args) != 11 {
-		return shim.Error("Incorrect number of arguments. Expecting 11")
+	if len(args) != 10 {
+		return shim.Error("Incorrect number of arguments. Expecting 10")
 	}
 
 	//input sanitation
@@ -316,11 +317,11 @@ func addMilestone(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	milestone.StartDate = args[3]
 	milestone.EndDate = args[4]
 	milestone.Description = args[5]
-	milestone.Status = args[7]
-	milestone.IsApproved = parseBool(args[8])
+	milestone.Status = args[6]
+	milestone.IsApproved = parseBool(args[7])
 
-	project.Status = args[9]
-	project.Flag = args[10]
+	project.Status = args[8]
+	project.Flag = args[9]
 
 	//update project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
