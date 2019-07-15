@@ -134,8 +134,8 @@ func updatePrivateUser(stub shim.ChaincodeStubInterface, args []string) pb.Respo
 	var err error
 	log.Println("started to update the private user")
 
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
 	//input sanitation
@@ -182,8 +182,8 @@ func addDonor(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
 	log.Println("started to register new donor")
 
-	if len(args) != 6 {
-		return shim.Error("Incorrect number of arguments. Expecting 6")
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
 	//input sanitation
@@ -234,8 +234,8 @@ func updateDonor(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
 	log.Println("started to update the donor")
 
-	if len(args) != 6 {
-		return shim.Error("Incorrect number of arguments. Expecting 6")
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
 	//input sanitation
@@ -283,8 +283,8 @@ func addOrg(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
 	log.Println("started to add new organization")
 
-	if len(args) != 6 {
-		return shim.Error("Incorrect number of arguments. Expecting 6")
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
 	//input sanitation
@@ -335,8 +335,8 @@ func updateOrg(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
 	log.Println("started to update new organization")
 
-	if len(args) != 6 {
-		return shim.Error("Incorrect number of arguments. Expecting 6")
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
 	//input sanitation
