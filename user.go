@@ -95,17 +95,18 @@ func addPrivateUser(stub shim.ChaincodeStubInterface, args []string) pb.Response
 		fmt.Printf("INVOKE: Error retrieving cert: %s", err)
 		return shim.Error("Error retrieving cert")
 	}
+	fmt.Println("certname = ", string(certname))
 
 	//check if user already exists
-	_, err = getPrivateUser(stub, string(certname))
+	_, err = getPrivateUser(stub, args[0])
 	if err == nil {
-		fmt.Println("This Private user already exists - " + string(certname))
-		return shim.Error("This private user already exists - " + string(certname))
+		fmt.Println("This Private user already exists - " + args[0])
+		return shim.Error("This private user already exists - " + args[0])
 	}
 
 	var user PrivateUser
 	user.ObjectType = "PrivateUser"
-	user.UserID = string(certname)
+	user.UserID = args[0]
 	user.Username = args[0]
 	user.FirstName = args[1]
 	user.LastName = args[2]
@@ -134,8 +135,8 @@ func updatePrivateUser(stub shim.ChaincodeStubInterface, args []string) pb.Respo
 	var err error
 	log.Println("started to update the private user")
 
-	if len(args) != 5 {
-		return shim.Error("Incorrect number of arguments. Expecting 5")
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
 
 	//input sanitation
@@ -153,18 +154,17 @@ func updatePrivateUser(stub shim.ChaincodeStubInterface, args []string) pb.Respo
 	log.Println("certname ", string(certname))
 
 	//check if user already exists
-	privateUser, err := getPrivateUser(stub, args[0])
+	privateUser, err := getPrivateUser(stub, string(certname))
 	if err != nil {
-		fmt.Println("This private user is not exists - " + args[0])
-		return shim.Error("This private user is not exists - " + args[0])
+		fmt.Println("This private user is not exists - " + string(certname))
+		return shim.Error("This private user is not exists - " + string(certname))
 	}
 	log.Println("args = ", args)
 
 	privateUser.FirstName = args[0]
 	privateUser.LastName = args[1]
 	privateUser.Role = args[2]
-	privateUser.UserID = args[3]
-	privateUser.Company = args[4]
+	privateUser.Company = args[3]
 
 	//store user
 	userAsBytes, _ := json.Marshal(privateUser)
@@ -198,16 +198,18 @@ func addDonor(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error("Error retrieving cert")
 	}
 
+	fmt.Println("certname ", string(certname))
+
 	//check if user already exists
-	_, err = getDonor(stub, string(certname))
+	_, err = getDonor(stub, args[0])
 	if err == nil {
-		fmt.Println("This donor user already exists - " + string(certname))
-		return shim.Error("This donor user already exists - " + string(certname))
+		fmt.Println("This donor user already exists - " + args[0])
+		return shim.Error("This donor user already exists - " + args[0])
 	}
 
 	var user Donor
 	user.ObjectType = "Donor"
-	user.DonorID = string(certname)
+	user.DonorID = args[0]
 	user.DonorUsername = args[0]
 	user.DonorCompany = args[1]
 	user.Role = args[2]
@@ -298,17 +300,18 @@ func addOrg(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		fmt.Printf("INVOKE: Error retrieving cert: %s", err)
 		return shim.Error("Error retrieving cert")
 	}
+	fmt.Println("certname ", string(certname))
 
 	//check if organization already exists
-	_, err = getOrg(stub, string(certname))
+	_, err = getOrg(stub, args[0])
 	if err == nil {
-		fmt.Println("This organization is already exists - " + string(certname))
-		return shim.Error("This organization is already exists - " + string(certname))
+		fmt.Println("This organization is already exists - " + args[0])
+		return shim.Error("This organization is already exists - " + args[0])
 	}
 
 	var user Organization
 	user.ObjectType = "Organization"
-	user.OrgID = string(certname)
+	user.OrgID = args[0]
 	user.OrgUsername = args[0]
 	user.OrgCompany = args[1]
 	user.Role = args[2]

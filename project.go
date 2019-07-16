@@ -964,3 +964,23 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 func fund(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	return shim.Success(nil)
 }
+
+//==============PROOF RELATED FUNCTION'S START HERE ===================================================
+func submitProof(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var err error
+
+	fmt.Println("starting submit_proof")
+
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
+	}
+	certname, err := get_cert(stub)
+	if err != nil {
+		fmt.Printf("INVOKE: Error retrieving cert: %s", err)
+		return shim.Error("Error retrieving cert")
+	}
+
+	fmt.Println("certname ", string(certname))
+
+	return shim.Success(nil)
+}
