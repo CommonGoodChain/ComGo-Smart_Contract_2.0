@@ -287,3 +287,27 @@ func query_all(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	return shim.Success(queryResults)
 }
+
+// =========================================================================================
+// getQueryResultForQueryStringCouch executes the passed in query string.
+// Result set is built and returned as a byte array containing the JSON results.
+// =========================================================================================
+func getQueryResultForQueryStringCouch(stub shim.ChaincodeStubInterface, queryString string) ([]byte, error) {
+
+	log.Printf("- getQueryResultForQueryStringCouch queryString:\n%s\n", queryString)
+
+	resultsIterator, err := stub.GetQueryResult(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer resultsIterator.Close()
+
+	buffer, err := constructQueryResponseFromIterator(resultsIterator)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("- getQueryResultForQueryStringCouch queryResult:\n%s\n", buffer.String())
+
+	return buffer.Bytes(), nil
+}

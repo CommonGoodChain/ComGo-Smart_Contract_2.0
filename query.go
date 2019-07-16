@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"log"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -72,6 +73,15 @@ func getHistory(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 //query
 func query(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	log.Println("***********Entering getQuery***********")
 
-	return shim.Success(nil)
+	log.Println(args)
+
+	queryString := args[0]
+
+	queryResults, err := getQueryResultForQueryStringCouch(stub, queryString)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(queryResults)
 }
