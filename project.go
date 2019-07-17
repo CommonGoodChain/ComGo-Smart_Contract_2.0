@@ -58,6 +58,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		sdg = append(sdg, s)
 	}
 
+	project.ObjectType = "Project"
 	project.Organization = args[1]
 	project.NGOCompany = args[2]
 	project.ProjectName = args[3]
