@@ -24,8 +24,8 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	log.Println(certname)
 
-	if len(args) != 21 {
-		return shim.Error("Incorrect number of arguments. Expecting 21")
+	if len(args) != 22 {
+		return shim.Error("Incorrect number of arguments. Expecting 22")
 	}
 
 	//input sanitation
@@ -81,6 +81,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var location Location
 	location.Latitude = args[19]
 	location.Longitude = args[20]
+	project.Country = args[21]
 	project.ProjectLoc = location
 
 	log.Println("project object is creataed ", project)
