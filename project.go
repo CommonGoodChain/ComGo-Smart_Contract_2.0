@@ -647,8 +647,8 @@ func updateActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	}
 	log.Println(certname)
 
-	if len(args) != 12 {
-		return shim.Error("Incorrect number of arguments. Expecting 12")
+	if len(args) != 13 {
+		return shim.Error("Incorrect number of arguments. Expecting 13")
 	}
 
 	//input sanitation
@@ -693,6 +693,7 @@ func updateActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	//update project status
 	project.Status = args[10]
 	project.Flag = args[11]
+	activity.ValidatorID = args[12]
 
 	//update project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
