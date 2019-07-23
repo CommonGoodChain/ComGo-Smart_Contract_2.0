@@ -143,6 +143,8 @@ type Activity struct {
 	IsApproved          bool     `json:"isApproved"`
 	Remarks             string   `json:"remarks"`
 	Description         string   `json:"description"`
+	TechnicalCriteria 	string	 `json:"technicalCriteria"`
+	FinancialCriteria	string	 `json:"financialCriteria"`
 }
 
 //SDG as

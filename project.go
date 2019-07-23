@@ -551,8 +551,8 @@ func addActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	log.Println(certname)
 
-	if len(args) != 16 {
-		return shim.Error("Incorrect number of arguments. Expecting 16")
+	if len(args) != 18 {
+		return shim.Error("Incorrect number of arguments. Expecting 18")
 	}
 
 	//input sanitation
@@ -605,7 +605,8 @@ func addActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	project.Flag = args[13]
 	activity.ValidatorID = args[14]
 	activity.Status = args[15]
-
+	activity.TechnicalCriteria = args[16]
+	activity.FinancialCriteria = args[17]
 	//update project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
 	errp := stub.PutState(project.ProjectID, projectAsBytes)
@@ -648,8 +649,8 @@ func updateActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	}
 	log.Println(certname)
 
-	if len(args) != 14 {
-		return shim.Error("Incorrect number of arguments. Expecting 14")
+	if len(args) != 16 {
+		return shim.Error("Incorrect number of arguments. Expecting 16")
 	}
 
 	//input sanitation
@@ -696,7 +697,8 @@ func updateActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	project.Flag = args[11]
 	activity.ValidatorID = args[12]
 	activity.Status = args[13]
-	
+	activity.TechnicalCriteria = args[14]
+	activity.FinancialCriteria = args[15]
 
 	//update project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
