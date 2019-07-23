@@ -256,6 +256,10 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return updateActivity(stub, args)
 	} else if function == "updateProjectStatus" { // Flow API's
 		return updateProjectStatus(stub, args)
+	} else if function == "updateMilestoneStatus" { // Flow API's
+	return updateMilestoneStatus(stub, args)
+	} else if function == "updateActivityStatus" { // Flow API's
+	return updateActivityStatus(stub, args)
 	} else if function == "getHistory" { // Query API's
 		return getHistory(stub, args)
 	} else if function == "query" {
