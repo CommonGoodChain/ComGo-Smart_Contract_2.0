@@ -805,10 +805,10 @@ func updateActivityStatus(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	}
 
 	activityAsBytes, _ := json.Marshal(activity) //convert to array of bytes
-	errm := stub.PutState(activity.ActivityID, activityAsBytes)
-	if errm != nil {
+	erra := stub.PutState(activity.ActivityID, activityAsBytes)
+	if erra != nil {
 		fmt.Println("Could not update activity")
-		return shim.Error(errm.Error())
+		return shim.Error(erra.Error())
 	}
 
 	log.Println("- end - update activity status")
