@@ -596,17 +596,16 @@ func addActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	activity.SecondaryValidation = parseBool(args[8])
 	activity.Remarks = args[9]
 	activity.IsApproved = parseBool(args[10])
-
+	activity.ValidatorID = args[11]
+	activity.Status = args[12]
+	activity.TechnicalCriteria = args[13]
+	activity.FinancialCriteria = args[14]
 	//update milstone status
-	milestone.Status = args[11]
+	milestone.Status = args[15]
 
 	//update project status
-	project.Status = args[12]
-	project.Flag = args[13]
-	activity.ValidatorID = args[14]
-	activity.Status = args[15]
-	activity.TechnicalCriteria = args[16]
-	activity.FinancialCriteria = args[17]
+	project.Status = args[16]
+	project.Flag = args[17]
 	//update project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
 	errp := stub.PutState(project.ProjectID, projectAsBytes)
@@ -688,17 +687,16 @@ func updateActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	activity.SecondaryValidation = parseBool(args[6])
 	activity.Remarks = args[7]
 	activity.IsApproved = parseBool(args[8])
-
+	activity.ValidatorID = args[9]
+	activity.Status = args[10]
+	activity.TechnicalCriteria = args[11]
+	activity.FinancialCriteria = args[12]
 	//update milstone status
-	milestone.Status = args[9]
+	milestone.Status = args[13]
 
 	//update project status
-	project.Status = args[10]
-	project.Flag = args[11]
-	activity.ValidatorID = args[12]
-	activity.Status = args[13]
-	activity.TechnicalCriteria = args[14]
-	activity.FinancialCriteria = args[15]
+	project.Status = args[14]
+	project.Flag = args[15]
 
 	//update project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
@@ -742,8 +740,8 @@ func updateActivityStatus(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	}
 	log.Println(certname)
 
-	if len(args) != 6 {
-		return shim.Error("Incorrect number of arguments. Expecting 6")
+	if len(args) != 7 {
+		return shim.Error("Incorrect number of arguments. Expecting 7")
 	}
 
 	//input sanitation
@@ -777,13 +775,13 @@ func updateActivityStatus(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	//update activity
 	activity.Status = args[1]
 	activity.IsApproved = parseBool(args[2])
-
+	activity.Remarks = args[3]
 	// upate milestone
-	milestone.Status = args[3]
+	milestone.Status = args[4]
 
 	// update project
-	project.Status = args[4]
-	project.Flag = args[5]
+	project.Status = args[5]
+	project.Flag = args[6]
 
 	log.Println("update milestone status object is creataed ", project)
 
