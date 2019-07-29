@@ -193,8 +193,8 @@ func updateProjectStatus(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	}
 	log.Println(certname)
 
-	if len(args) != 5 {
-		return shim.Error("Incorrect number of arguments. Expecting 5")
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
 	}
 
 	//input sanitation
@@ -214,6 +214,7 @@ func updateProjectStatus(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	project.Flag = args[2]
 	project.IsPublished = parseBool(args[3])
 	project.IsApproved = parseBool(args[4])
+	project.Remarks = args[5]
 
 	log.Println("update Project project status and flag object is creataed ", project)
 
@@ -379,9 +380,9 @@ func updateMilestone(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	}
 
 	// get the project
-	project, err := getProject(stub, args[0])
+	project, err := getProject(stub, milestone.ProjectID)
 	if err != nil {
-		fmt.Println("Project is missing " + args[0])
+		fmt.Println("Project is missing " + milestone.ProjectID)
 		return shim.Error(err.Error())
 	}
 
