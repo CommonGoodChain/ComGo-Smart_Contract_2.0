@@ -33,6 +33,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if err != nil {
 		return shim.Error(err.Error())
 	}
+	
 
 	//set project details
 	var project Project
