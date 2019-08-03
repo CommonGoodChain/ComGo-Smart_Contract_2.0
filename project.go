@@ -894,8 +894,8 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	log.Println(certname)
 
-	if len(args) != 3 {
-		return shim.Error("Incorrect number of arguments. Expecting 3")
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
 	//input sanitation
@@ -910,14 +910,14 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		fmt.Println("Project is missing " + args[0])
 		return shim.Error(err.Error())
 	}
+
 	var donationAmt = parseFloat(args[1])
-	donationAmt += project.FundNotAllocated
-	project.FundRaised = donationAmt;
-	project.Flag = args[2]
+	donationAmt += project.FundAllocated
+
 	if project.FundAllocationType == "2" { // auto fund allocate
 		//get all activities whose activity budget is >= donation amount (sort by date= chronologically)
 		docType := "Activity"
-		queryString := fmt.Sprintf("{\"selector\":{\"docType\":\"Activity\"}}", string(docType))
+		queryString := fmt.Sprintf("{\"selector\":{\"docType\":\"%s\"},\"fields\":[\"docType\",\"ActivityID\"]}", string(docType))
 
 		act, err := getQueryResultInBytesForQueryStringCouch(stub, queryString)
 		if err != nil {
@@ -926,20 +926,28 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 		var activities []Activity
 		json.Unmarshal([]byte(act), &activities)
-		actBalAmt := donationAmt
+
 		for i := range activities {
-			ActivityBudget := i.ActivityBudget
-			FundAllocated := i.FundAllocated
-				actFundRem := actFundBudget - actFundRaised
-			if actBalAmt >= actFundRem {
-				activities[i].FundAllocated += actFundRem
-				activities[i].Status = "Fund Allocated"
-				project.FundAllocated = += actFundRem
-				project.Status = "Fund Allocated"
-				project.FundNotAllocated = project.FundNotAllocated - project.FundNotAllocated
+			if activities[i].ActivityBudget == donationAmt {
+				activities[i].FundAllocated += donationAmt
+				activities[i].Status = "Auto Fund Allocated"
+
+				project.FundNotAllocated = project.FundNotAllocated - donationAmt
+				project.Status = "Auto Fund Allocated"
+				project.Flag = args[4]
+				break
+			} else if activities[i].ActivityBudget > donationAmt {
+				activities[i].FundAllocated += activities[i].ActivityBudget
+				activities[i].Status = "Auto Fund Allocated"
+
+				// add remaining amount in fundNotAllocated field
+				project.FundNotAllocated = project.FundNotAllocated - activities[i].ActivityBudget
+				project.Status = "Auto Fund Allocated"
+				project.Flag = args[4]
+
 			} else {
 				// add donation amount in fundNotAllocated field
-				project.FundNotAllocated += parseFloat(actBalAmt)
+				project.FundNotAllocated += parseFloat(args[1])
 				break
 			}
 
@@ -952,15 +960,12 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		}
 	} else {
 		project.FundNotAllocated += parseFloat(args[1])
+		project.Status = "Fund Not Allocated"
+		project.Flag = args[4]
 	}
+
 	log.Println("project object after donation ", project)
 
-	if actBalAmt >= actFundRem {
-		actBalAmt = actBalAmt - actFundRem
-	}
-	if i == len(activities)-1 {
-		project.FundNotAllocated = actBalAmt
-	}
 	//store project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
 	errz := stub.PutState(project.ProjectID, projectAsBytes)
