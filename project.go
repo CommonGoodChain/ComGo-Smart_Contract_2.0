@@ -34,7 +34,6 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error(err.Error())
 	}
 
-
 	//set project details
 	var project Project
 	project.ProjectID = args[0]
@@ -912,7 +911,7 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	var donationAmt = parseFloat(args[1])
 	donationAmt += project.FundNotAllocated
-	project.FundRaised = donationAmt;
+	project.FundRaised = donationAmt
 	project.Flag = args[2]
 	if project.FundAllocationType == "2" { // auto fund allocate
 		//get all activities whose activity budget is >= donation amount (sort by date= chronologically)
@@ -928,19 +927,25 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		json.Unmarshal([]byte(act), &activities)
 		actBalAmt := donationAmt
 		for i := range activities {
-			ActivityBudget := i.ActivityBudget
-			FundAllocated := i.FundAllocated
-				actFundRem := actFundBudget - actFundRaised
+			actFundRem := activities[i].ActivityBudget - activities[i].FundAllocated
 			if actBalAmt >= actFundRem {
 				activities[i].FundAllocated += actFundRem
 				activities[i].Status = "Fund Allocated"
-				project.FundAllocated = += actFundRem
+				project.FundAllocated += actFundRem
 				project.Status = "Fund Allocated"
 				project.FundNotAllocated = project.FundNotAllocated - project.FundNotAllocated
 			} else {
 				// add donation amount in fundNotAllocated field
-				project.FundNotAllocated += parseFloat(actBalAmt)
+				project.FundNotAllocated += actBalAmt
 				break
+			}
+
+			if actBalAmt >= actFundRem {
+				actBalAmt = actBalAmt - actFundRem
+			}
+
+			if i == len(activities)-1 {
+				project.FundNotAllocated = actBalAmt
 			}
 
 			//update actvity
@@ -955,12 +960,6 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	log.Println("project object after donation ", project)
 
-	if actBalAmt >= actFundRem {
-		actBalAmt = actBalAmt - actFundRem
-	}
-	if i == len(activities)-1 {
-		project.FundNotAllocated = actBalAmt
-	}
 	//store project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
 	errz := stub.PutState(project.ProjectID, projectAsBytes)
@@ -969,7 +968,7 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error(errz.Error())
 	}
 
-	log.Println("- end - delete activity")
+	log.Println("- end - fund project")
 
 	return shim.Success(nil)
 }
