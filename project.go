@@ -910,8 +910,8 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error(err.Error())
 	}
 	var donationAmt = parseFloat(args[1])
+	project.FundRaised += parseFloat(args[1])
 	donationAmt += project.FundNotAllocated
-	project.FundRaised = donationAmt
 	project.Flag = args[2]
 	if project.FundAllocationType == "2" { // auto fund allocate
 		//get all activities whose activity budget is >= donation amount (sort by date= chronologically)
