@@ -923,7 +923,6 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		if err != nil {
 			return shim.Error(err.Error())
 		}
-		fmt.Println("List of Activities are: ", act)
 		var activities []Activity
 		json.Unmarshal([]byte(act), &activities)
 		actBalAmt := donationAmt
