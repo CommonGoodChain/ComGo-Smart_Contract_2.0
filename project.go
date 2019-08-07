@@ -916,15 +916,16 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if project.FundAllocationType == "2" { // auto fund allocate
 		//get all activities whose activity budget is >= donation amount (sort by date= chronologically)
 		docType := "Activity"
-		queryString := fmt.Sprintf("{\"selector\":{\"docType\":\"Activity\"}}", string(docType))
+		queryString := fmt.Sprintf("{\"selector\":{\"docType\":\"Activity\",\"projectId\":%s},\"sort\":[{\"startDate\":\"asc\"}]}", string(docType),args[0])
 
 		act, err := getQueryResultInBytesForQueryStringCouch(stub, queryString)
 		if err != nil {
 			return shim.Error(err.Error())
 		}
-
+		
 		var activities []Activity
 		json.Unmarshal([]byte(act), &activities)
+		fmt.Println("List of Activities are: " + activities)
 		actBalAmt := donationAmt
 		for i := range activities {
 			actFundRem := activities[i].ActivityBudget - activities[i].FundAllocated
