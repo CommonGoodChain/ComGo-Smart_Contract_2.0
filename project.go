@@ -930,7 +930,7 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 				activities[i].FundAllocated += actFundRem
 				activities[i].Status = "Fund Allocated"
 				project.FundAllocated += actFundRem
-				project.Status = "Fund Allocated"
+				// project.Status = "Fund Allocated"
 				project.FundNotAllocated = project.FundNotAllocated - project.FundNotAllocated
 			} else {
 				// add donation amount in fundNotAllocated field
