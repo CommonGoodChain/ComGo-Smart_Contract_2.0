@@ -906,7 +906,7 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	// get the project
 	project, err := getProject(stub, args[0])
 	if err != nil {
-		fmt.Println("Project is missing " + args[0])
+		fmt.Println("Project is missing ", args[0])
 		return shim.Error(err.Error())
 	}
 	var donationAmt = parseFloat(args[1])
@@ -923,10 +923,9 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		if err != nil {
 			return shim.Error(err.Error())
 		}
-		
+		fmt.Println("List of Activities are: ", act)
 		var activities []Activity
 		json.Unmarshal([]byte(act), &activities)
-		fmt.Println("List of Activities are: " + activities)
 		actBalAmt := donationAmt
 		for i := range activities {
 			actFundRem := activities[i].ActivityBudget - activities[i].FundAllocated
