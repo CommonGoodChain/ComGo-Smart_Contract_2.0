@@ -174,6 +174,30 @@ func getQueryResultInBytesForQueryStringCouch(stub shim.ChaincodeStubInterface, 
 	return buffer.Bytes(), nil
 }
 
+// =========================================================================================
+// getQueryResultForQueryStringCouch executes the passed in query string.
+// Result set is built and returned as a byte array containing the JSON results.
+// =========================================================================================
+func myfunction(stub shim.ChaincodeStubInterface, queryString string) ([]byte, error) {
+
+	fmt.Printf("- getQueryResultForQueryStringCouch queryString:\n%s\n", queryString)
+
+	resultsIterator, err := stub.GetQueryResult(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer resultsIterator.Close()
+
+	buffer, err := myFunctions(resultsIterator)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Printf("- getQueryResultForQueryStringCouch queryResult:\n%s\n", buffer.String())
+
+	return buffer.Bytes(), nil
+}
+
 // ===========================================================================================
 // constructQueryResponseFromIterator constructs a JSON array containing query results from
 // a given result iterator
@@ -310,4 +334,39 @@ func getQueryResultForQueryStringCouch(stub shim.ChaincodeStubInterface, querySt
 	log.Printf("- getQueryResultForQueryStringCouch queryResult:\n%s\n", buffer.String())
 
 	return buffer.Bytes(), nil
+}
+
+// ===========================================================================================
+// constructQueryResponseFromIterator constructs a JSON array containing query results from
+// a given result iterator
+// ===========================================================================================
+func myFunctions(resultsIterator shim.StateQueryIteratorInterface) (*bytes.Buffer, error) {
+	// buffer is a JSON array containing QueryResults
+	var buffer bytes.Buffer
+	buffer.WriteString("[")
+
+	bArrayMemberAlreadyWritten := false
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+		// Add a comma before array members, suppress it for the first array member
+		if bArrayMemberAlreadyWritten == true {
+			buffer.WriteString(",")
+		}
+		// buffer.WriteString("{\"Key\":")
+		// buffer.WriteString("\"")
+		// buffer.WriteString(queryResponse.Key)
+		// buffer.WriteString("\"")
+
+		// buffer.WriteString(", \"Record\":")
+		// Record is a JSON object, so we write as-is
+		buffer.WriteString(string(queryResponse.Value))
+		// buffer.WriteString("}")
+		bArrayMemberAlreadyWritten = true
+	}
+	buffer.WriteString("]")
+
+	return &buffer, nil
 }
