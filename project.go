@@ -914,7 +914,6 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	project.FundRaised = donationAmt
 	project.Flag = args[2]
 	ProjectId := args[0]
-	Order := "asc"
 	if project.FundAllocationType == "2" { // auto fund allocate
 		//get all activities whose activity budget is >= donation amount (sort by date= chronologically)
 		docType := "Activity"
