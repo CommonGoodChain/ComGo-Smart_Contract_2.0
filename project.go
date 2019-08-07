@@ -925,10 +925,10 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		fmt.Println("Activities are: ", activities)
 		actBalAmt := donationAmt
 		for i := range activities {
-			actFundRem := activities[i].ActivityBudget - activities[i].FundAllocated
+			actFundRem := activities[i].Record.ActivityBudget - activities[i].Record.FundAllocated
 			if actBalAmt >= actFundRem {
-				activities[i].FundAllocated += actFundRem
-				activities[i].Status = "Fund Allocated"
+				activities[i].Record.FundAllocated += actFundRem
+				activities[i].Record.Status = "Fund Allocated"
 				project.FundAllocated += actFundRem
 				project.Status = "Fund Allocated"
 				project.FundNotAllocated = project.FundNotAllocated - project.FundNotAllocated
@@ -947,8 +947,8 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 			}
 
 			//update actvity
-			actAsBytes, _ := json.Marshal(activities[i])                  //convert to array of bytes
-			errAct := stub.PutState(activities[i].ActivityID, actAsBytes) //rewrite the project with id as key
+			actAsBytes, _ := json.Marshal(activities[i].Record)                  //convert to array of bytes
+			errAct := stub.PutState(activities[i].Record.ActivityID, actAsBytes) //rewrite the project with id as key
 			if errAct != nil {
 				fmt.Println(errAct)
 			}
