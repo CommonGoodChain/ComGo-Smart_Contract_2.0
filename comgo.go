@@ -143,8 +143,8 @@ type Activity struct {
 	IsApproved          bool     `json:"isApproved"`
 	Remarks             string   `json:"remarks"`
 	Description         string   `json:"description"`
-	TechnicalCriteria 	string	 `json:"technicalCriteria"`
-	FinancialCriteria	string	 `json:"financialCriteria"`
+	TechnicalCriteria   string   `json:"technicalCriteria"`
+	FinancialCriteria   string   `json:"financialCriteria"`
 }
 
 //SDG as
@@ -256,10 +256,14 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return updateActivity(stub, args)
 	} else if function == "updateProjectStatus" { // Flow API's
 		return updateProjectStatus(stub, args)
-	} else if function == "updateMilestoneStatus" { // Flow API's
-	return updateMilestoneStatus(stub, args)
-	} else if function == "updateActivityStatus" { // Flow API's
-	return updateActivityStatus(stub, args)
+	} else if function == "updateMilestoneStatus" {
+		return updateMilestoneStatus(stub, args)
+	} else if function == "updateActivityStatus" {
+		return updateActivityStatus(stub, args)
+	} else if function == "fundReq" {
+		return fundReq(stub, args)
+	} else if function == "fundRelease" {
+		return fundRelease(stub, args)
 	} else if function == "getHistory" { // Query API's
 		return getHistory(stub, args)
 	} else if function == "query" {
