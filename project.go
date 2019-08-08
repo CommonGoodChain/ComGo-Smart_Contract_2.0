@@ -927,11 +927,24 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		for i := range activities {
 			actFundRem := activities[i].ActivityBudget - activities[i].FundAllocated
 			if actBalAmt >= actFundRem {
+				milestone, err := getMilestone(stub, activities[i].MilestoneID)
+				if err != nil {
+					fmt.Println("Milestone is not present " + activities[i].MilestoneID)
+					return shim.Error(err.Error())
+				}
 				activities[i].FundAllocated += actFundRem
 				activities[i].Status = "Fund Allocated"
 				project.FundAllocated += actFundRem
+				milestone.MilFundAllocated += actFundRem
+				milestone.Status = "Fund Allocated"
 				// project.Status = "Fund Allocated"
 				project.FundNotAllocated = project.FundNotAllocated - project.FundNotAllocated
+				milestoneAsBytes, _ := json.Marshal(milestone) //convert to array of bytes
+				errm := stub.PutState(milestone.MilestoneID, milestoneAsBytes)
+				if errm != nil {
+					fmt.Println("Failed to request fund in milestone")
+					return shim.Error(errm.Error())
+				}
 			} else {
 				// add donation amount in fundNotAllocated field
 				project.FundNotAllocated += actBalAmt
