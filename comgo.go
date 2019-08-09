@@ -145,6 +145,7 @@ type Activity struct {
 	Description         string   `json:"description"`
 	TechnicalCriteria   string   `json:"technicalCriteria"`
 	FinancialCriteria   string   `json:"financialCriteria"`
+	ProofHash           string   `json:"proofHash"`
 }
 
 //SDG as

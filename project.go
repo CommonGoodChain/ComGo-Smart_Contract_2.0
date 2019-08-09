@@ -1166,5 +1166,62 @@ func submitProof(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	fmt.Println("certname ", string(certname))
 
+	// check the activity
+	activity, err := getActivity(stub, args[0])
+	if err != nil {
+		fmt.Println("ActivityID is not present " + activity.ActivityID)
+		return shim.Error(err.Error())
+	}
+
+	// check the milestone
+	milestone, err := getMilestone(stub, activity.MilestoneID)
+
+	if err != nil {
+		fmt.Println("Milestone is not present " + activity.MilestoneID)
+		return shim.Error(err.Error())
+	}
+
+	// get the project
+	project, err := getProject(stub, activity.ProjectID)
+	if err != nil {
+		fmt.Println("Project is missing " + activity.ProjectID)
+		return shim.Error(err.Error())
+	}
+
+	//update activity
+	activity.Status = args[1]
+	activity.ProofHash = args[2]
+
+	// upate milestone
+	milestone.Status = args[3]
+
+	// update project
+	project.Status = args[4]
+	project.Flag = args[5]
+
+	//store project
+	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
+	errz := stub.PutState(project.ProjectID, projectAsBytes)
+
+	if errz != nil {
+		log.Println("Failed to request fund in project")
+		return shim.Error(errz.Error())
+	}
+
+	//store project
+	milestoneAsBytes, _ := json.Marshal(milestone) //convert to array of bytes
+	errm := stub.PutState(milestone.MilestoneID, milestoneAsBytes)
+	if errm != nil {
+		fmt.Println("Failed to request fund in milestone")
+		return shim.Error(errm.Error())
+	}
+
+	activityAsBytes, _ := json.Marshal(activity) //convert to array of bytes
+	erra := stub.PutState(activity.ActivityID, activityAsBytes)
+	if erra != nil {
+		fmt.Println("Failed to request fund in activity")
+		return shim.Error(erra.Error())
+	}
+
 	return shim.Success(nil)
 }
