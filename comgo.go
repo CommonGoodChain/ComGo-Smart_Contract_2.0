@@ -273,6 +273,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return query_all(stub, args)
 	} else if function == "fundProject" {
 		return fundProject(stub, args)
+	} else if function == "submitProof" {
+		return submitProof(stub, args)
 	}
 
 	// error out
