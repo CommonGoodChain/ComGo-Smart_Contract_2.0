@@ -277,6 +277,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return submitProof(stub, args)
 	} else if function == "fundAllocateManually" {
 		return fundAllocateManually(stub, args)
+	} else if function == "balancedfundAllocate" {
+		return balancedfundAllocate(stub, args)
 	}
 
 	// error out
