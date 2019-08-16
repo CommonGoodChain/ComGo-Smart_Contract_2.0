@@ -984,6 +984,88 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	return shim.Success(nil)
 }
 
+func fundAllocateManually(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var err error
+	certname, err := get_cert(stub)
+	if err != nil {
+		fmt.Printf("INVOKE: Error retrieving cert: %s", err)
+		return shim.Error("Error retrieving cert")
+	}
+	log.Println(certname)
+
+	if len(args) != 9 {
+		return shim.Error("Incorrect number of arguments. Expecting 9")
+	}
+
+	//input sanitation
+	err = sanitize_arguments(args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	// check the activity
+	activity, err := getActivity(stub, args[0])
+	if err != nil {
+		fmt.Println("ActivityID is not present " + activity.ActivityID)
+		return shim.Error(err.Error())
+	}
+
+	// get the milestone
+	milestone, err := getMilestone(stub, activity.MilestoneID)
+	if err != nil {
+		fmt.Println("Milestone is not present " + activity.MilestoneID)
+		return shim.Error(err.Error())
+	}
+
+	// get the project
+	project, err := getProject(stub, activity.ProjectID)
+	if err != nil {
+		fmt.Println("Project is missing " + activity.ProjectID)
+		return shim.Error(err.Error())
+	}
+
+	activity.FundAllocated = parseFloat(args[1])
+	activity.Status = args[2]
+	milestone.MilFundAllocated = parseFloat(args[3])
+	//update milstone status
+	milestone.Status = args[4]
+
+	//update project status
+	project.FundAllocated = parseFloat(args[5])
+	project.Status = args[6]
+	project.FundNotAllocated = parseFloat(args[7])
+	project.Flag = args[8]
+
+	//update project
+	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
+	errp := stub.PutState(project.ProjectID, projectAsBytes)
+
+	if errp != nil {
+		log.Println("Could not update the project")
+		return shim.Error(errp.Error())
+	}
+
+	//update milestone
+	milestoneAsBytes, _ := json.Marshal(milestone) //convert to array of bytes
+	errz := stub.PutState(milestone.MilestoneID, milestoneAsBytes)
+	if errz != nil {
+		fmt.Println("Could not update milestone")
+		return shim.Error(errz.Error())
+	}
+
+	//update activity
+	activityAsBytes, _ := json.Marshal(activity) //convert to array of bytes
+	erra := stub.PutState(activity.ActivityID, activityAsBytes)
+	if erra != nil {
+		fmt.Println("Could not update activity")
+		return shim.Error(erra.Error())
+	}
+
+	log.Println("- end - update activity")
+
+	return shim.Success(nil)
+}
+
 //fund
 func fund(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	return shim.Success(nil)
