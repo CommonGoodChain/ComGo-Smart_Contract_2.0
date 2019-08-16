@@ -993,8 +993,8 @@ func fundAllocateManually(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	}
 	log.Println(certname)
 
-	if len(args) != 9 {
-		return shim.Error("Incorrect number of arguments. Expecting 9")
+	if len(args) != 7 {
+		return shim.Error("Incorrect number of arguments. Expecting 7")
 	}
 
 	//input sanitation
@@ -1026,15 +1026,15 @@ func fundAllocateManually(stub shim.ChaincodeStubInterface, args []string) pb.Re
 
 	activity.FundAllocated = parseFloat(args[1])
 	activity.Status = args[2]
-	milestone.MilFundAllocated = parseFloat(args[3])
+	milestone.MilFundAllocated += parseFloat(args[1])
 	//update milstone status
-	milestone.Status = args[4]
+	milestone.Status = args[3]
 
 	//update project status
-	project.FundAllocated = parseFloat(args[5])
-	project.Status = args[6]
-	project.FundNotAllocated = parseFloat(args[7])
-	project.Flag = args[8]
+	project.FundAllocated += parseFloat(args[1])
+	project.Status = args[4]
+	project.FundNotAllocated = parseFloat(args[5])
+	project.Flag = args[6]
 
 	//update project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
