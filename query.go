@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
+	"strconv"
+	"time"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -66,9 +70,84 @@ func getActivity(stub shim.ChaincodeStubInterface, id string) (Activity, error) 
 }
 
 //getHistory
-func getHistory(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+// func getHistory(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	return shim.Success(nil)
+// 	return shim.Success(nil)
+// }
+
+func getHistory(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	/*type AuditHistory struct {
+		TxId  string `json:"txId"`
+		Value Asset  `json:"value"`
+	}
+	var history []AuditHistory
+	var project Asset
+	*/
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	projectId := args[0]
+	fmt.Printf("- start getHistoryForProject: %s\n", projectId)
+
+	// Get History
+	resultsIterator, err := stub.GetHistoryForKey(projectId)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	defer resultsIterator.Close()
+
+	// buffer is a JSON array containing historic values for the marble
+	var buffer bytes.Buffer
+	buffer.WriteString("[")
+
+	bArrayMemberAlreadyWritten := false
+	fmt.Printf("- getHistory resultsIterator: ", resultsIterator)
+	for resultsIterator.HasNext() {
+		response, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+		// Add a comma before array members, suppress it for the first array member
+		if bArrayMemberAlreadyWritten == true {
+			buffer.WriteString(",")
+		}
+		buffer.WriteString("{\"TxId\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(response.TxId)
+		buffer.WriteString("\"")
+
+		buffer.WriteString(", \"Value\":")
+		// if it was a delete operation on given key, then we need to set the
+		//corresponding value null. Else, we will write the response.Value
+		//as-is (as the Value itself a JSON marble)
+		if response.IsDelete {
+			buffer.WriteString("null")
+		} else {
+			buffer.WriteString(string(response.Value))
+		}
+
+		buffer.WriteString(", \"Timestamp\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(time.Unix(response.Timestamp.Seconds, int64(response.Timestamp.Nanos)).String())
+		buffer.WriteString("\"")
+
+		buffer.WriteString(", \"IsDelete\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(strconv.FormatBool(response.IsDelete))
+		buffer.WriteString("\"")
+
+		buffer.WriteString("}")
+		bArrayMemberAlreadyWritten = true
+
+	}
+
+	buffer.WriteString("]")
+
+	fmt.Printf("- getHistoryForMarble returning:\n%s\n", buffer.String())
+
+	return shim.Success(buffer.Bytes())
 }
 
 //query
