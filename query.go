@@ -83,9 +83,6 @@ func getHistory(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var history []AuditHistory
 	var project Asset
 	*/
-	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 1")
-	}
 
 	projectId := args[0]
 	fmt.Printf("- start getHistoryForProject: %s\n", projectId)
