@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"sort"
 	"strings"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -923,6 +924,10 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		var activities []Activity
 		json.Unmarshal([]byte(act), &activities)
 		fmt.Println("Activities are: ", activities)
+		sort.SliceStable(activities, func(i, j int) bool {
+			return activities[i].StartDate < activities[j].StartDate
+		})
+		fmt.Println("Kuldeep sorted activites=> ")
 		actBalAmt := donationAmt
 		for i := range activities {
 			actFundRem := activities[i].ActivityBudget - activities[i].FundAllocated
