@@ -72,7 +72,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	project.FundRaised = parseFloat(args[10])
 	project.FundAllocated = parseFloat(args[11])
 	project.ProjectBudget = parseFloat(args[12])
-	project.ProjectOwner = args[13]
+	project.ProjectOwner = append(project.ProjectOwner, args[13])
 	project.FundAllocationType = args[14]
 	project.IsPublished = parseBool(args[15])
 	project.Status = args[16]
@@ -155,7 +155,9 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	project.FundRaised = parseFloat(args[10])
 	project.FundAllocated = parseFloat(args[11])
 	project.ProjectBudget = parseFloat(args[12])
-	project.ProjectOwner = args[13]
+
+	var emptyArr []string
+	project.ProjectOwner = append(emptyArr, args[13])
 	project.FundAllocationType = args[14]
 	project.IsPublished = parseBool(args[15])
 	project.Status = args[16]
