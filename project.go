@@ -59,6 +59,19 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		sdg = append(sdg, s)
 	}
 
+	orgString := args[13]
+	var orglist []string
+	decs := json.NewDecoder(strings.NewReader(orgString))
+	errrs := decs.Decode(&orglist)
+	log.Println(errrs, orglist)
+	log.Println(decs.Decode(&orglist))
+	var org []projectOrganizations
+	for i := range orglist {
+		var s projectOrganizations
+		s.orgName = orglist[i]
+		org = append(org, s)
+	}
+
 	project.ObjectType = "Project"
 	project.Organization = args[1]
 	project.NGOCompany = args[2]
@@ -72,12 +85,12 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	project.FundRaised = parseFloat(args[10])
 	project.FundAllocated = parseFloat(args[11])
 	project.ProjectBudget = parseFloat(args[12])
-	project.ProjectOwner = append(project.ProjectOwner, args[13])
 	project.FundAllocationType = args[14]
 	project.IsPublished = parseBool(args[15])
 	project.Status = args[16]
 	project.Flag = args[17]
 	project.SDG = sdg
+	project.ProjectOwner = org
 
 	var location Location
 	location.Latitude = args[19]
@@ -143,6 +156,19 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 		sdg = append(sdg, s)
 	}
 
+	orgString := args[13]
+	var orglist []string
+	decs := json.NewDecoder(strings.NewReader(orgString))
+	errrs := decs.Decode(&orglist)
+	log.Println(errrs, orglist)
+	log.Println(decs.Decode(&orglist))
+	var org []projectOrganizations
+	for i := range orglist {
+		var s projectOrganizations
+		s.orgName = orglist[i]
+		org = append(org, s)
+	}
+
 	project.Organization = args[1]
 	project.NGOCompany = args[2]
 	project.ProjectName = args[3]
@@ -156,13 +182,12 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	project.FundAllocated = parseFloat(args[11])
 	project.ProjectBudget = parseFloat(args[12])
 
-	var emptyArr []string
-	project.ProjectOwner = append(emptyArr, args[13])
 	project.FundAllocationType = args[14]
 	project.IsPublished = parseBool(args[15])
 	project.Status = args[16]
 	project.Flag = args[17]
 	project.SDG = sdg
+	project.ProjectOwner = org
 
 	var location Location
 	location.Latitude = args[19]
