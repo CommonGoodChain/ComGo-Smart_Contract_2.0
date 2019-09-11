@@ -65,16 +65,24 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	errrs := decs.Decode(&orglist)
 	log.Println(errrs, orglist)
 	log.Println(decs.Decode(&orglist))
-	var org []projectOrganizations
+	var org []projectOwner
+	var ngoComp []ngoCompany
+	var projOrg []projectOrg
 	for i := range orglist {
-		var s projectOrganizations
+		var s projectOwner
+		var n ngoCompany
+		var o projectOrg
 		s.OrgName = orglist[i]
+		n.OrgName = orglist[i]
+		o.OrgName = orglist[i]
 		org = append(org, s)
+		ngoComp = append(ngoComp, n)
+		projOrg = append(projOrg, o)
 	}
 
 	project.ObjectType = "Project"
-	project.Organization = args[1]
-	project.NGOCompany = args[2]
+	project.Organization = projOrg
+	project.NGOCompany = ngoComp
 	project.ProjectName = args[3]
 	project.FundGoal = parseFloat(args[4])
 	project.ProjectType = args[5]
@@ -162,15 +170,23 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	errrs := decs.Decode(&orglist)
 	log.Println(errrs, orglist)
 	log.Println(decs.Decode(&orglist))
-	var org []projectOrganizations
+	var org []projectOwner
+	var ngoComp []ngoCompany
+	var projOrg []projectOrg
 	for i := range orglist {
-		var s projectOrganizations
+		var s projectOwner
+		var n ngoCompany
+		var o projectOrg
 		s.OrgName = orglist[i]
+		n.OrgName = orglist[i]
+		o.OrgName = orglist[i]
 		org = append(org, s)
+		ngoComp = append(ngoComp, n)
+		projOrg = append(projOrg, o)
 	}
 
-	project.Organization = args[1]
-	project.NGOCompany = args[2]
+	project.Organization = projOrg
+	project.NGOCompany = ngoComp
 	project.ProjectName = args[3]
 	project.FundGoal = parseFloat(args[4])
 	project.ProjectType = args[5]
