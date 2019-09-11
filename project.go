@@ -68,7 +68,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var org []projectOrganizations
 	for i := range orglist {
 		var s projectOrganizations
-		s.orgName = orglist[i]
+		s.OrgName = orglist[i]
 		org = append(org, s)
 	}
 
@@ -165,7 +165,7 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	var org []projectOrganizations
 	for i := range orglist {
 		var s projectOrganizations
-		s.orgName = orglist[i]
+		s.OrgName = orglist[i]
 		org = append(org, s)
 	}
 

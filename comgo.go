@@ -150,7 +150,7 @@ type Activity struct {
 
 //SDG as
 type projectOrganizations struct {
-	orgName string `json:"OrgName"`
+	OrgName string `json:"OrgName"`
 }
 
 //SDG as
