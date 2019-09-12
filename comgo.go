@@ -99,6 +99,7 @@ type Project struct {
 	EndDate            string         `json:"endDate"`
 	Description        string         `json:"description"`
 	Country            string         `json:"country"`
+	Visibility         string         `json:"visibility"`
 }
 
 //Milestone as
@@ -292,6 +293,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return fundAllocateManually(stub, args)
 	} else if function == "balancedfundAllocate" {
 		return balancedfundAllocate(stub, args)
+	} else if function == "updateProjectVisibility" { // Flow API's
+		return updateProjectVisibility(stub, args)
 	}
 
 	// error out

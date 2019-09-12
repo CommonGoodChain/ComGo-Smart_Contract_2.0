@@ -106,7 +106,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	project.Country = args[21]
 	project.FundNotAllocated = parseFloat(args[22])
 	project.ProjectLoc = location
-
+	project.Visibility = "Just Me"
 	log.Println("project object is creataed ", project)
 
 	//store project
@@ -274,6 +274,52 @@ func updateProjectStatus(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	}
 
 	log.Println("- end - update Project project status and flag")
+
+	return shim.Success(nil)
+}
+
+func updateProjectVisibility(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var err error
+	log.Println("starting - update project visibility")
+
+	certname, err := get_cert(stub)
+	if err != nil {
+		fmt.Printf("INVOKE: Error retrieving cert: %s", err)
+		return shim.Error("Error retrieving cert")
+	}
+	log.Println(certname)
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	//input sanitation
+	err = sanitize_arguments(args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	// get the project
+	project, err := getProject(stub, args[0])
+	if err != nil {
+		fmt.Println("Project is missing " + args[0])
+		return shim.Error(err.Error())
+	}
+
+	project.Visibility = args[1]
+
+	log.Println("update project visibility ", project)
+
+	//store project
+	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
+	errz := stub.PutState(project.ProjectID, projectAsBytes)
+
+	if errz != nil {
+		log.Println("Could not update project visibility")
+		return shim.Error(errz.Error())
+	}
+
+	log.Println("- end - update project visibility")
 
 	return shim.Success(nil)
 }
