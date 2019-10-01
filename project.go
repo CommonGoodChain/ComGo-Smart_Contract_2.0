@@ -65,17 +65,13 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	errrs := decs.Decode(&orglist)
 	log.Println(errrs, orglist)
 	log.Println(decs.Decode(&orglist))
-	var org []projectOwner
 	var ngoComp []ngoCompany
 	var projOrg []projectOrg
 	for i := range orglist {
-		var s projectOwner
 		var n ngoCompany
 		var o projectOrg
-		s.OrgName = orglist[i]
 		n.OrgName = orglist[i]
 		o.OrgName = orglist[i]
-		org = append(org, s)
 		ngoComp = append(ngoComp, n)
 		projOrg = append(projOrg, o)
 	}
@@ -98,7 +94,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	project.Status = args[16]
 	project.Flag = args[17]
 	project.SDG = sdg
-	project.ProjectOwner = org
+	project.ProjectOwner = args[1]
 
 	var location Location
 	location.Latitude = args[19]
@@ -170,17 +166,13 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	errrs := decs.Decode(&orglist)
 	log.Println(errrs, orglist)
 	log.Println(decs.Decode(&orglist))
-	var org []projectOwner
 	var ngoComp []ngoCompany
 	var projOrg []projectOrg
 	for i := range orglist {
-		var s projectOwner
 		var n ngoCompany
 		var o projectOrg
-		s.OrgName = orglist[i]
 		n.OrgName = orglist[i]
 		o.OrgName = orglist[i]
-		org = append(org, s)
 		ngoComp = append(ngoComp, n)
 		projOrg = append(projOrg, o)
 	}
@@ -203,7 +195,7 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	project.Status = args[16]
 	project.Flag = args[17]
 	project.SDG = sdg
-	project.ProjectOwner = org
+	project.ProjectOwner = args[1]
 
 	var location Location
 	location.Latitude = args[19]
