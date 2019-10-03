@@ -81,7 +81,7 @@ type Project struct {
 	FundAllocated      float64        `json:"fundAllocated"`
 	FundNotAllocated   float64        `json:"fundNotAllocated"`
 	ProjectBudget      float64        `json:"projectBudget"`
-	ProjectOwner       string 		  `json:"projectOwner"`
+	ProjectOwner       []projectOwner `json:"projectOwner"`
 	Organization       []projectOrg   `json:"organization"`
 	NGOCompany         []ngoCompany   `json:"ngoCompany"`
 	Donations          []string       `json:"donations"`
@@ -158,6 +158,9 @@ type projectOrg struct {
 	OrgName string `json:"OrgName"`
 }
 
+type projectOwner struct {
+	OrgName string `json:"OrgName"`
+}
 
 //SDG as
 type SDG struct {

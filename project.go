@@ -65,13 +65,17 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	errrs := decs.Decode(&orglist)
 	log.Println(errrs, orglist)
 	log.Println(decs.Decode(&orglist))
+	var org []projectOwner
 	var ngoComp []ngoCompany
 	var projOrg []projectOrg
 	for i := range orglist {
+		var s projectOwner
 		var n ngoCompany
 		var o projectOrg
+		s.OrgName = orglist[i]
 		n.OrgName = orglist[i]
 		o.OrgName = orglist[i]
+		org = append(org, s)
 		ngoComp = append(ngoComp, n)
 		projOrg = append(projOrg, o)
 	}
@@ -94,7 +98,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	project.Status = args[16]
 	project.Flag = args[17]
 	project.SDG = sdg
-	project.ProjectOwner = args[1]
+	project.ProjectOwner = org
 
 	var location Location
 	location.Latitude = args[19]
@@ -166,13 +170,17 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	errrs := decs.Decode(&orglist)
 	log.Println(errrs, orglist)
 	log.Println(decs.Decode(&orglist))
+	var org []projectOwner
 	var ngoComp []ngoCompany
 	var projOrg []projectOrg
 	for i := range orglist {
+		var s projectOwner
 		var n ngoCompany
 		var o projectOrg
+		s.OrgName = orglist[i]
 		n.OrgName = orglist[i]
 		o.OrgName = orglist[i]
+		org = append(org, s)
 		ngoComp = append(ngoComp, n)
 		projOrg = append(projOrg, o)
 	}
@@ -195,7 +203,7 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	project.Status = args[16]
 	project.Flag = args[17]
 	project.SDG = sdg
-	project.ProjectOwner = args[1]
+	project.ProjectOwner = org
 
 	var location Location
 	location.Latitude = args[19]
@@ -1108,11 +1116,12 @@ func fundAllocateManually(stub shim.ChaincodeStubInterface, args []string) pb.Re
 
 	// get the project
 	project, err := getProject(stub, activity.ProjectID)
+	prjDonations := ""
 	if err != nil {
 		fmt.Println("Project is missing " + activity.ProjectID)
 		return shim.Error(err.Error())
 	}
-
+	var fund = parseFloat(args[1])
 	activity.FundAllocated = parseFloat(args[1])
 	activity.Status = args[2]
 	milestone.MilFundAllocated += parseFloat(args[1])
@@ -1123,6 +1132,9 @@ func fundAllocateManually(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	project.FundAllocated += parseFloat(args[1])
 	project.Status = args[4]
 	project.FundNotAllocated = parseFloat(args[5])
+	fr := fmt.Sprint(fund)
+	prjDonations = project.ProjectID + "-" + activity.MilestoneID + "-" + activity.ActivityID + "-" + string(certname) + "-" + fr
+	project.Donations = append(project.Donations, prjDonations)
 	project.Flag = args[6]
 
 	//update project
