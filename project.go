@@ -1038,7 +1038,7 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 				}
 			} else {
 				// add donation amount in fundNotAllocated field
-				project.FundNotAllocated += actBalAmt
+				project.FundNotAllocated += parseFloat(args[1])
 				break
 			}
 
