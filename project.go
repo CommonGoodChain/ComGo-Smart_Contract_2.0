@@ -1014,25 +1014,27 @@ func fundProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 			actFundRem := activities[i].ActivityBudget - activities[i].FundAllocated
 			prjDonations := ""
 			if actBalAmt >= actFundRem {
-				milestone, err := getMilestone(stub, activities[i].MilestoneID)
-				if err != nil {
-					fmt.Println("Milestone is not present " + activities[i].MilestoneID)
-					return shim.Error(err.Error())
-				}
-				activities[i].FundAllocated += actFundRem
-				activities[i].Status = "Fund Allocated"
-				project.FundAllocated += actFundRem
-				milestone.MilFundAllocated += actFundRem
-				milestone.Status = "Fund Allocated"
-				// project.Status = "Fund Allocated"
-				project.FundNotAllocated = project.FundNotAllocated - project.FundNotAllocated
-				milestoneAsBytes, _ := json.Marshal(milestone) //convert to array of bytes
-				fr := fmt.Sprint(actFundRem)
-				prjDonations = project.ProjectID + "-" + activities[i].MilestoneID + "-" + activities[i].ActivityID + "-" + string(certname) + "-" + fr
-				project.Donations = append(project.Donations, prjDonations)
-				errm := stub.PutState(milestone.MilestoneID, milestoneAsBytes)
-				if errm != nil {
-					return shim.Error(errm.Error())
+				if actFundRem > 0 {
+					milestone, err := getMilestone(stub, activities[i].MilestoneID)
+					if err != nil {
+						fmt.Println("Milestone is not present " + activities[i].MilestoneID)
+						return shim.Error(err.Error())
+					}
+					activities[i].FundAllocated += actFundRem
+					activities[i].Status = "Fund Allocated"
+					project.FundAllocated += actFundRem
+					milestone.MilFundAllocated += actFundRem
+					milestone.Status = "Fund Allocated"
+					// project.Status = "Fund Allocated"
+					project.FundNotAllocated = project.FundNotAllocated - project.FundNotAllocated
+					milestoneAsBytes, _ := json.Marshal(milestone) //convert to array of bytes
+					fr := fmt.Sprint(actFundRem)
+					prjDonations = project.ProjectID + "-" + activities[i].MilestoneID + "-" + activities[i].ActivityID + "-" + string(certname) + "-" + fr
+					project.Donations = append(project.Donations, prjDonations)
+					errm := stub.PutState(milestone.MilestoneID, milestoneAsBytes)
+					if errm != nil {
+						return shim.Error(errm.Error())
+					}
 				}
 			} else {
 				// add donation amount in fundNotAllocated field
