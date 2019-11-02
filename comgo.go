@@ -70,36 +70,37 @@ type Organization struct {
 
 //Project as
 type Project struct {
-	ObjectType         string       `json:"docType"` //field for couchdb
-	ProjectID          string       `json:"projectId"`
-	ProjectName        string       `json:"projectName"`
-	ProjectType        string       `json:"projectType"`
-	Flag               string       `json:"flag"`
-	FundGoal           float64      `json:"fundGoal"`
-	Currency           string       `json:"currency"`
-	FundRaised         float64      `json:"fundRaised"`
-	FundAllocated      float64      `json:"fundAllocated"`
-	FundNotAllocated   float64      `json:"fundNotAllocated"`
-	ProjectBudget      float64      `json:"projectBudget"`
-	ProjectOwner       string       `json:"projectOwner"`
-	Organization       []projectOrg `json:"organization"`
-	NGOCompany         []ngoCompany `json:"ngoCompany"`
-	Donations          []string     `json:"donations"`
-	Status             string       `json:"status"`
-	FundAllocationType string       `json:"fundAllocationType"` // 1 = Manual, 2 = Automated, 3 = On Proof Submission, 4 = On Validation
-	TransactionLoc     Location     `json:"transactionLoc"`
-	SDG                []SDG        `json:"SDG"`
-	ProjectLoc         Location     `json:"projectLoc"`
-	CreatedBy          string       `json:"createdBy"`
-	SubRole            string       `json:"subRole"`
-	IsPublished        bool         `json:"isPublished"`
-	IsApproved         bool         `json:"isApproved"`
-	Remarks            string       `json:"remarks"`
-	StartDate          string       `json:"startDate"`
-	EndDate            string       `json:"endDate"`
-	Description        string       `json:"description"`
-	Country            string       `json:"country"`
-	Visibility         string       `json:"visibility"`
+	ObjectType         string          `json:"docType"` //field for couchdb
+	ProjectID          string          `json:"projectId"`
+	ProjectName        string          `json:"projectName"`
+	ProjectType        string          `json:"projectType"`
+	Flag               string          `json:"flag"`
+	FundGoal           float64         `json:"fundGoal"`
+	Currency           string          `json:"currency"`
+	FundRaised         float64         `json:"fundRaised"`
+	FundAllocated      float64         `json:"fundAllocated"`
+	FundNotAllocated   float64         `json:"fundNotAllocated"`
+	ProjectBudget      float64         `json:"projectBudget"`
+	ProjectOwner       string          `json:"projectOwner"`
+	Organization       []projectOrg    `json:"organization"`
+	NGOCompany         []ngoCompany    `json:"ngoCompany"`
+	Beneficiaries      []Beneficiaries `json:"beneficiaries"`
+	Donations          []string        `json:"donations"`
+	Status             string          `json:"status"`
+	FundAllocationType string          `json:"fundAllocationType"` // 1 = Manual, 2 = Automated, 3 = On Proof Submission, 4 = On Validation
+	TransactionLoc     Location        `json:"transactionLoc"`
+	SDG                []SDG           `json:"SDG"`
+	ProjectLoc         Location        `json:"projectLoc"`
+	CreatedBy          string          `json:"createdBy"`
+	SubRole            string          `json:"subRole"`
+	IsPublished        bool            `json:"isPublished"`
+	IsApproved         bool            `json:"isApproved"`
+	Remarks            string          `json:"remarks"`
+	StartDate          string          `json:"startDate"`
+	EndDate            string          `json:"endDate"`
+	Description        string          `json:"description"`
+	Country            string          `json:"country"`
+	Visibility         string          `json:"visibility"`
 }
 
 //Milestone as
@@ -149,7 +150,10 @@ type Activity struct {
 	ProofHash           string   `json:"proofHash"`
 }
 
-//SDG as
+type Beneficiaries struct {
+	beneficiary string `json:"beneficiary"`
+}
+
 type ngoCompany struct {
 	OrgName string `json:"OrgName"`
 }

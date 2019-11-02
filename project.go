@@ -25,8 +25,8 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 	log.Println(certname)
 
-	if len(args) != 23 {
-		return shim.Error("Incorrect number of arguments. Expecting 23")
+	if len(args) != 24 {
+		return shim.Error("Incorrect number of arguments. Expecting 24")
 	}
 
 	//input sanitation
@@ -57,6 +57,18 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		var s SDG
 		s.SDGType = list[i]
 		sdg = append(sdg, s)
+	}
+
+	beneficiaryString := args[23]
+	var beneficiarylist []string
+	bens := json.NewDecoder(strings.NewReader(beneficiaryString))
+	benerrrs := bens.Decode(&beneficiarylist)
+	log.Println(benerrrs, beneficiarylist)
+	var beneficiary []Beneficiaries
+	for i := range beneficiarylist {
+		var b Beneficiaries
+		b.beneficiary = beneficiarylist[i]
+		beneficiary = append(beneficiary, b)
 	}
 
 	orgString := args[13]
@@ -101,6 +113,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	location.Longitude = args[20]
 	project.Country = args[21]
 	project.FundNotAllocated = parseFloat(args[22])
+	project.Beneficiaries = beneficiary
 	project.ProjectLoc = location
 	project.Visibility = "Just Me"
 	log.Println("project object is creataed ", project)
@@ -160,6 +173,18 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 		sdg = append(sdg, s)
 	}
 
+	beneficiaryString := args[23]
+	var beneficiarylist []string
+	bens := json.NewDecoder(strings.NewReader(beneficiaryString))
+	benerrrs := bens.Decode(&beneficiarylist)
+	log.Println(benerrrs, beneficiarylist)
+	var beneficiary []Beneficiaries
+	for i := range beneficiarylist {
+		var b Beneficiaries
+		b.beneficiary = beneficiarylist[i]
+		beneficiary = append(beneficiary, b)
+	}
+
 	orgString := args[13]
 	var orglist []string
 	decs := json.NewDecoder(strings.NewReader(orgString))
@@ -202,6 +227,7 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	location.Longitude = args[20]
 	project.Country = args[21]
 	project.FundNotAllocated = parseFloat(args[22])
+	project.Beneficiaries = beneficiary
 	project.ProjectLoc = location
 
 	log.Println("update project object is creataed ", project)
