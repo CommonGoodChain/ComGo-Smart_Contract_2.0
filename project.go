@@ -67,7 +67,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var beneficiaryNames []Beneficiaries
 	for i := range beneficiarylist {
 		var b Beneficiaries
-		b.beneficiary = beneficiarylist[i]
+		b.Beneficiary = beneficiarylist[i]
 		beneficiaryNames = append(beneficiaryNames, b)
 	}
 
@@ -181,7 +181,7 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	var beneficiaryNames []Beneficiaries
 	for i := range beneficiarylist {
 		var b Beneficiaries
-		b.beneficiary = beneficiarylist[i]
+		b.Beneficiary = beneficiarylist[i]
 		beneficiaryNames = append(beneficiaryNames, b)
 	}
 	fmt.Println(beneficiaryNames)

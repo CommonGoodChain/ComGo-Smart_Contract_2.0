@@ -150,8 +150,9 @@ type Activity struct {
 	ProofHash           string   `json:"proofHash"`
 }
 
+// Beneficiary List as
 type Beneficiaries struct {
-	beneficiary string `json:"beneficiary"`
+	Beneficiary string `json:"Beneficiary"`
 }
 
 type ngoCompany struct {
