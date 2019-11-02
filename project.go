@@ -143,8 +143,8 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	}
 	log.Println(certname)
 
-	if len(args) != 23 {
-		return shim.Error("Incorrect number of arguments. Expecting 23")
+	if len(args) != 24 {
+		return shim.Error("Incorrect number of arguments. Expecting 24")
 	}
 
 	//input sanitation
