@@ -84,7 +84,7 @@ type Project struct {
 	ProjectOwner       string          `json:"projectOwner"`
 	Organization       []projectOrg    `json:"organization"`
 	NGOCompany         []ngoCompany    `json:"ngoCompany"`
-	Beneficiaries      []Beneficiaries `json:"beneficiaries"`
+	Beneficiaries      []Beneficiaries `json:"Beneficiaries"`
 	Donations          []string        `json:"donations"`
 	Status             string          `json:"status"`
 	FundAllocationType string          `json:"fundAllocationType"` // 1 = Manual, 2 = Automated, 3 = On Proof Submission, 4 = On Validation
