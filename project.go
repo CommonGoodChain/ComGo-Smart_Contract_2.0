@@ -184,7 +184,8 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 		b.beneficiary = beneficiarylist[i]
 		beneficiaryNames = append(beneficiaryNames, b)
 	}
-
+	fmt.Println(beneficiaryNames)
+	fmt.Println(beneficiaryString)
 	orgString := args[13]
 	var orglist []string
 	decs := json.NewDecoder(strings.NewReader(orgString))
