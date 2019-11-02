@@ -64,11 +64,11 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	bens := json.NewDecoder(strings.NewReader(beneficiaryString))
 	benerrrs := bens.Decode(&beneficiarylist)
 	log.Println(benerrrs, beneficiarylist)
-	var beneficiary []Beneficiaries
+	var beneficiaryNames []Beneficiaries
 	for i := range beneficiarylist {
 		var b Beneficiaries
 		b.beneficiary = beneficiarylist[i]
-		beneficiary = append(beneficiary, b)
+		beneficiaryNames = append(beneficiaryNames, b)
 	}
 
 	orgString := args[13]
@@ -113,7 +113,7 @@ func addProject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	location.Longitude = args[20]
 	project.Country = args[21]
 	project.FundNotAllocated = parseFloat(args[22])
-	project.Beneficiaries = beneficiary
+	project.Beneficiaries = beneficiaryNames
 	project.ProjectLoc = location
 	project.Visibility = "Just Me"
 	log.Println("project object is creataed ", project)
@@ -178,11 +178,11 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	bens := json.NewDecoder(strings.NewReader(beneficiaryString))
 	benerrrs := bens.Decode(&beneficiarylist)
 	log.Println(benerrrs, beneficiarylist)
-	var beneficiary []Beneficiaries
+	var beneficiaryNames []Beneficiaries
 	for i := range beneficiarylist {
 		var b Beneficiaries
 		b.beneficiary = beneficiarylist[i]
-		beneficiary = append(beneficiary, b)
+		beneficiaryNames = append(beneficiaryNames, b)
 	}
 
 	orgString := args[13]
@@ -227,7 +227,7 @@ func updateProject(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	location.Longitude = args[20]
 	project.Country = args[21]
 	project.FundNotAllocated = parseFloat(args[22])
-	project.Beneficiaries = beneficiary
+	project.Beneficiaries = beneficiaryNames
 	project.ProjectLoc = location
 
 	log.Println("update project object is creataed ", project)
