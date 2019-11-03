@@ -882,6 +882,9 @@ func updateActivityValidation(stub shim.ChaincodeStubInterface, args []string) p
 	//update activity
 	var paramStatus = args[1]
 	if paramStatus == "Validation Successful" {
+		fmt.Println(paramStatus)
+		fmt.Println(activity.SecondaryValidation == true)
+		fmt.Println(activity.Status == "Partial Validation Successful")
 		if activity.SecondaryValidation == true {
 			if activity.Status == "Partial Validation Successful" {
 				project.Flag = "Activity " + activity.ActivityName + " has been validated by " + string(certname)
@@ -890,6 +893,9 @@ func updateActivityValidation(stub shim.ChaincodeStubInterface, args []string) p
 				project.Flag = "Partial Validation of Activity " + activity.ActivityName + " has been done by " + string(certname)
 				activity.Status = "Partial Validation Successful"
 			}
+			fmt.Println(project.Flag)
+			fmt.Println(activity.Status)
+
 		} else {
 			project.Flag = "Activity " + activity.ActivityName + " has been validated by " + string(certname)
 			activity.Status = "Validation Successful"
