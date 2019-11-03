@@ -882,6 +882,8 @@ func updateActivityValidation(stub shim.ChaincodeStubInterface, args []string) p
 	//update activity
 	var paramStatus = args[1]
 	if paramStatus == "Validation Successful" {
+		fmt.Println(project.Flag)
+		fmt.Println(activity.Status)
 		fmt.Println(paramStatus)
 		fmt.Println(activity.SecondaryValidation == true)
 		fmt.Println(activity.Status == "Partial Validation Successful")
@@ -909,7 +911,8 @@ func updateActivityValidation(stub shim.ChaincodeStubInterface, args []string) p
 	//store project
 	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
 	errz := stub.PutState(project.ProjectID, projectAsBytes)
-
+	fmt.Println("errz")
+	fmt.Println(errz)
 	if errz != nil {
 		log.Println("Could not update the status and flag of project")
 		return shim.Error(errz.Error())
@@ -917,6 +920,8 @@ func updateActivityValidation(stub shim.ChaincodeStubInterface, args []string) p
 
 	activityAsBytes, _ := json.Marshal(activity) //convert to array of bytes
 	erra := stub.PutState(activity.ActivityID, activityAsBytes)
+	fmt.Println("erra")
+	fmt.Println(erra)
 	if erra != nil {
 		fmt.Println("Could not update activity")
 		return shim.Error(erra.Error())
