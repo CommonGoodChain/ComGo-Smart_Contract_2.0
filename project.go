@@ -840,6 +840,72 @@ func updateActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	return shim.Success(nil)
 }
 
+func updateActivityValidation(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var err error
+	log.Println("starting - update activity validation status")
+
+	certname, err := get_cert(stub)
+	if err != nil {
+		fmt.Printf("INVOKE: Error retrieving cert: %s", err)
+		return shim.Error("Error retrieving cert")
+	}
+	log.Println(certname)
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	//input sanitation
+	err = sanitize_arguments(args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	// check the activity
+	activity, err := getActivity(stub, args[0])
+	if err != nil {
+		fmt.Println("ActivityID is not present " + activity.ActivityID)
+		return shim.Error(err.Error())
+	}
+	if err != nil {
+		fmt.Println("Milestone is not present " + activity.MilestoneID)
+		return shim.Error(err.Error())
+	}
+
+	// get the project
+	project, err := getProject(stub, activity.ProjectID)
+	if err != nil {
+		fmt.Println("Project is missing " + activity.ProjectID)
+		return shim.Error(err.Error())
+	}
+
+	//update activity
+	activity.Status = args[1]
+	project.Flag = "Activity " + activity.ActivityName + " has been validated by " + string(certname)
+
+	log.Println("update activity status object is creataed ", project)
+
+	//store project
+	projectAsBytes, _ := json.Marshal(project) //convert to array of bytes
+	errz := stub.PutState(project.ProjectID, projectAsBytes)
+
+	if errz != nil {
+		log.Println("Could not update the status and flag of project")
+		return shim.Error(errz.Error())
+	}
+
+	activityAsBytes, _ := json.Marshal(activity) //convert to array of bytes
+	erra := stub.PutState(activity.ActivityID, activityAsBytes)
+	if erra != nil {
+		fmt.Println("Could not update activity")
+		return shim.Error(erra.Error())
+	}
+
+	log.Println("- end - update activity status")
+
+	return shim.Success(nil)
+}
+
 //update activity status
 func updateActivityStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error

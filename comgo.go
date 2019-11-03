@@ -296,6 +296,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return balancedfundAllocate(stub, args)
 	} else if function == "updateProjectVisibility" { // Flow API's
 		return updateProjectVisibility(stub, args)
+	} else if function == "updateActivityValidation" { // Flow API's
+		return updateActivityValidation(stub, args)
 	}
 
 	// error out
