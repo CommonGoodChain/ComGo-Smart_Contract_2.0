@@ -610,8 +610,8 @@ func deleteMilestone(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	}
 	log.Println(certname)
 
-	if len(args) != 3 {
-		return shim.Error("Incorrect number of arguments. Expecting 3")
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 
 	//input sanitation
@@ -626,16 +626,6 @@ func deleteMilestone(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 		fmt.Println("milestone is missing " + args[0])
 		return shim.Error(err.Error())
 	}
-
-	// get the project
-	project, err := getProject(stub, milestone.ProjectID)
-	if err != nil {
-		fmt.Println("Project is missing " + milestone.ProjectID)
-		return shim.Error(err.Error())
-	}
-
-	project.Status = args[1]
-	project.Flag = args[2]
 
 	log.Println("delete milestone ", milestone)
 
@@ -1030,8 +1020,8 @@ func deleteActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	}
 	log.Println(certname)
 
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 
 	//input sanitation
@@ -1046,27 +1036,6 @@ func deleteActivity(stub shim.ChaincodeStubInterface, args []string) pb.Response
 		fmt.Println("ActivityID is not present " + activity.ActivityID)
 		return shim.Error(err.Error())
 	}
-
-	// get the milestone
-	milestone, err := getMilestone(stub, activity.MilestoneID)
-	if err != nil {
-		fmt.Println("milestone is missing " + activity.MilestoneID)
-		return shim.Error(err.Error())
-	}
-
-	// get the project
-	project, err := getProject(stub, activity.ProjectID)
-	if err != nil {
-		fmt.Println("Project is missing " + activity.ProjectID)
-		return shim.Error(err.Error())
-	}
-
-	//update milestone
-	milestone.Status = args[1]
-
-	//update project
-	project.Status = args[2]
-	project.Flag = args[3]
 
 	log.Println("delete activity ", activity)
 

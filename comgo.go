@@ -150,7 +150,7 @@ type Activity struct {
 	ProofHash           string   `json:"proofHash"`
 }
 
-// Beneficiary List as
+//Beneficiary List as
 type Beneficiaries struct {
 	Beneficiary string `json:"Beneficiary"`
 }
@@ -262,14 +262,20 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return addProject(stub, args)
 	} else if function == "updateProject" {
 		return updateProject(stub, args)
+	} else if function == "deleteProject" {
+		return deleteProject(stub, args)
 	} else if function == "addMilestone" {
 		return addMilestone(stub, args)
 	} else if function == "updateMilestone" {
 		return updateMilestone(stub, args)
+	} else if function == "deleteMilestone" {
+		return deleteMilestone(stub, args)
 	} else if function == "addActivity" {
 		return addActivity(stub, args)
 	} else if function == "updateActivity" {
 		return updateActivity(stub, args)
+	} else if function == "deleteActivity" {
+		return deleteActivity(stub, args)
 	} else if function == "updateProjectStatus" { // Flow API's
 		return updateProjectStatus(stub, args)
 	} else if function == "updateMilestoneStatus" {
