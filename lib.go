@@ -22,8 +22,8 @@ func sanitize_arguments(strs []string) error {
 		if len(val) <= 0 {
 			return errors.New("Argument " + strconv.Itoa(i) + " must be a non-empty string")
 		}
-		if len(val) > 200 {
-			return errors.New("Argument " + strconv.Itoa(i) + " must be <= 200 characters")
+		if len(val) > 2000 {
+			return errors.New("Argument " + strconv.Itoa(i) + " must be <= 2000 characters")
 		}
 	}
 	return nil
