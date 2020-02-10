@@ -1,21 +1,11 @@
 /*
-Li
-censed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding  donorship.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
+The Affero General Public License (Affero GPL and informally Affero License) is a free software license. 
+The first version of the Affero General Public License (AGPLv1), was published by Affero, Inc. in March 2002,
+and based on the GNU General Public License, version 2 (GPLv2). The second version (AGPLv2) was published in November 2007, 
+as a transitional license to allow an upgrade path from AGPLv1 to the GNU Affero General Public License (a variant of the 
+original Affero GPL license that is compatible with GPLv3).
+Both versions of the Affero GPL were designed to close a perceived application service provider (ASP) loophole in the
+ordinary GPL, where, by using but not distributing the software, the copyleft provisions are not triggered. 
 */
 
 package main
